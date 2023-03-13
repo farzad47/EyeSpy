@@ -1,8 +1,10 @@
+
 header {
     width: 100%;
     position: fixed;
     background-color: #ddd;
     z-index: 100;
+
 }
 
 body {
@@ -23,7 +25,6 @@ body::-webkit-scrollbar {
 }
 
 .topnav {
-
     list-style-type: none;
     text-align: center;
 }
@@ -54,6 +55,7 @@ body::-webkit-scrollbar {
 }
 
 .lowHead>ul {
+
     margin: 10px;
     display: flex;
     padding-left: 145px;
@@ -94,6 +96,8 @@ body::-webkit-scrollbar {
     list-style-type: none;
     padding: 3px;
     margin-left: 5em;
+
+
 
 }
 
@@ -164,7 +168,8 @@ main {
     min-height: 200px;
 }
 
-.hero {
+
+.hero{
     background-color: black;
 }
 

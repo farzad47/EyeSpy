@@ -1,9 +1,30 @@
 
-header{
+
+header {
     width: 100%;
+    position: fixed;
+    background-color: #ddd;
+    z-index: 100;
 
 }
 
+body {
+    font-size: 12px;
+
+}
+
+body {
+    -ms-overflow-style: none;
+    /* for Internet Explorer, Edge */
+    scrollbar-width: none;
+    /* for Firefox */
+    overflow-y: scroll;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+    /* for Chrome, Safari, and Opera */
+}
 
 .topnav {
     list-style-type: none;
@@ -25,27 +46,59 @@ header{
     color: #8cca8cf2 ;
 }
 
+.topHead {
+    background-color: #151725;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    padding-left: 230px;
+    padding-right: 50px;
+}
+
+.topHead>div {
+    color: white;
+}
+
+.fa-envelope,
+.fa-phone {
+    color: #8cca8cf2;
+}
+
 .topnav p {
     font: 1.5em 'Poiret One', cursive;
     ;
     margin-left: -27em;
 }
 
-.lowHead > ul{
+
+.lowHead>ul {
+
+
     margin: 10px;
     display: flex;
     padding-left: 145px;
 }
-.ourLogo{
+
+.pageSelected>a {
+    color: #5eb85e !important;
+    font-weight: 600;
+}
+
+.ourLogo {
+
     height: 100px;
     width: 130px;
     background-color: #5eb85e;
     position: absolute;
     top: 0px;
     left: 60px;
-    border-radius: 0px 0px 4px 4px;
+
+    border-radius: 0px 0px 2px 2px;
 }
-.ourLogo > img{
+
+.ourLogo>img {
+
     height: 50%;
     width: 50%;
     border-radius: 50% 50% 50% 50%;
@@ -54,7 +107,10 @@ header{
     margin-top: 10px;
 
 }
-.ourLogo > div{
+
+
+.ourLogo>div {
+
     padding-top: 5px;
 }
 
@@ -88,7 +144,7 @@ a:active {
 main {
     min-height: 400px;
     background-color: #fff;
-
+    padding-top: 80px;
 }
 
 .names {
@@ -136,20 +192,29 @@ main {
     min-height: 200px;
 }
 
+
 .hero{
     background-color: black;
 }
-.bigFont{
+
+.bigFont {
     font-size: 40px;
 }
-.getAppointBtn{
+
+.getAppointBtn,.getDemoBtn {
+
     padding: 10px;
     background-color: #5eb85e;
     margin-top: 30px;
     margin-right: 185px;
     border-radius: 2px;
 }
-.heroTxt{
+
+.getDemoBtn{
+    margin-right: 0px !important;
+}
+.heroTxt {
+
     color: #ddd;
     position: absolute;
     /* align-items: baseline; */
@@ -159,87 +224,150 @@ main {
     width: 100%;
     padding: 100px;
 }
+
 .hero img {
     width: 100%;
-    height: 385px;
+    height: 445px;
+    object-fit: cover;
 
 }
 
-.container {
-    margin-top: 5em;
+.getDemo>img {
+    object-fit: cover;
+    width: 100%;
+    height: 35pc;
 }
 
-.explanation {
-    margin: 0px 10em 5em;
+.ourOfferings {
+    color: #151725;
+    background-color: #E2E7E1;
+    padding: 40px 60px 80px 60px
 }
 
-h3 {
-    font: 3.5em;
-    text-align: center;
+.offeringsList>div>div {
+    padding-top: 10px;
 }
 
-#events p {
-    font-family: 'Poiret One', cursive;
-    font-weight: bold;
-    text-align: center;
-
+.offeringsList>div {
+    width: 25%;
+    padding: 10px 15px 10px 0px;
 }
 
-#events {
-    margin-bottom: 5em;
-}
-
-.column {
-    width: 300px;
-    float: left;
-    margin-left: 20px;
-    margin-bottom: 20px;
-}
-
-#rsvp {
-    padding: 1em;
-    font: 20px bold;
-    margin: 2em 25em;
-}
-
-.rsvpform {
-    min-width: 30%;
-    margin: auto;
-    margin-top: 2em;
+.hr-lines:before {
+    content: " ";
+    display: block;
+    height: 2px;
+    width: 50px;
+    position: absolute;
+    top: 50%;
+    background: #5eb85e;
 
 }
 
-input [type=text] {
-    color: violet;
-    font-size: 12;
+.workingProcess>div>.hr-lines:before {
+    right: 65px;
 }
 
-form p {
-    font-size: 18px;
-    margin-bottom: 5px;
+.hr-lines {
+    position: relative;
 }
 
-/* Does not properly style text: */
-input[type="radio"] {
-    color: purple;
+.offersTitle {
+    font-size: 14px;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.offeringsList>div>div>i {
+    color: #5eb85e;
+    font-size: 20px;
+}
+
+.hr-lines {
+    color: #5eb85e;
     font-size: 16px;
-    /* Size effects bullet and padding */
+    position: relative;
+    /*  new lines  */
+    max-width: 150px;
+    text-align: center;
 }
 
-/*
-  input[type=submit] {
-      border-radius:10px;
-      border: 0;
-      width: 80px;
-      height: 35px;
-      font-family: Tahoma;
-      background: #000;
-      color: #fff;
-  }
-  */
+.offeringsList {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+}
+
+.workingProcess {
+
+    background-color: white;
+    border: 1px solid #ddd;
+    position: absolute;
+    padding: 10px 20px;
+    width: 80%;
+    margin: -5% 10%;
+}
+
+.processDivs>div>div {
+    margin-bottom: 10px;
+}
+
+.processDivs>div {
+    padding: 15px 30px 10px 0px;
+}
+
+.num {
+    background-color: #5eb85e;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+
+.workingProcess>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.topic {
+    flex-direction: column;
+    align-items: flex-start !important;
+    padding-left: 60px;
+}
+
+.getDemo {
+    background-color: black;
+}
+
+.demoTxt {
+    position: absolute;
+    top: 98em;
+    /* left: 40%; */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.btn-login{
+    position: absolute;
+    right: 10%;
+    top :45px;
+    background-color: #5eb85e;
+    color: white;
+    border-radius: 2px;
+    padding: 5px 15px;
+}
 
 footer {
-    height: 6em;
+    height: 3em;
     background-color: #bdcbd9;
 }
 
@@ -247,12 +375,4 @@ footer p {
     text-align: center;
     padding: 3em 0;
     font-family: 'Poiret One', cursive;
-}
-
-
-
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
 }

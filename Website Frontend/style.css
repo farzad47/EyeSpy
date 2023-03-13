@@ -1,30 +1,65 @@
-header {
-    height: 11em;
-    background-color: #fff;
-    padding-top: 1em;
+header{
+    width: 100%;
 }
 
 
 .topnav {
-    margin-right: 7%;
-    margin-top: 10px;
+   
     list-style-type: none;
     text-align: center;
 }
-
+.topHead{
+    background-color: #151725;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    padding-left: 230px;
+    padding-right: 50px;
+}
+.topHead > div{
+    color: white;
+}
+.fa-envelope,.fa-phone{
+    color: #8cca8cf2 ;
+}
 .topnav p {
     font: 1.5em 'Poiret One', cursive;
     ;
     margin-left: -27em;
 }
+.lowHead > ul{
+    margin: 10px;
+    display: flex;
+    padding-left: 145px;
+}
+.ourLogo{
+    height: 100px;
+    width: 130px;
+    background-color: #5eb85e;
+    position: absolute;
+    top: 0px;
+    left: 60px;
+    border-radius: 0px 0px 4px 4px;
+}
+.ourLogo > img{
+    height: 50%;
+    width: 50%;
+    border-radius: 50% 50% 50% 50%;
+    background-color: #ffffffde;
+    padding: 10px;
+    margin-top: 10px;
 
+}
+.ourLogo > div{
+    padding-top: 5px;
+}
 .topnav ul li {
     font-family: 10em 'Poiret One', cursive;
     display: inline-block;
     list-style-type: none;
     padding: 3px;
     margin-left: 5em;
-    margin-top: 5em;
 
 }
 
@@ -94,11 +129,32 @@ main {
     margin-bottom: 5em;
     min-height: 200px;
 }
-
-
-
+.hero{
+    background-color: black;
+}
+.bigFont{
+    font-size: 40px;
+}
+.getAppointBtn{
+    padding: 10px;
+    background-color: #5eb85e;
+    margin-top: 30px;
+    margin-right: 185px;
+    border-radius: 2px;
+}
+.heroTxt{
+    color: #ddd;
+    position: absolute;
+    /* align-items: baseline; */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    padding: 100px;
+}
 .hero img {
     width: 100%;
+    height: 385px;
 }
 
 .container {

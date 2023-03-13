@@ -8,142 +8,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="rdwedding" content="All you need to know about Rich and Dawn's upcoming wedding.">
 
-		<title>Rich and Dawn's Wedding</title>
+		<title>EyeSpy</title>
+    <link href="style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 		<link href="style.css" rel="stylesheet" type="text/css" />
+
 
 	</head>
 
 	<body>
 		<header>
   		<nav class="topnav">
-    		<p>Skipping Along our Happily Ever After.....</p> 
-
-        <ul>
-        	<li><a href="wedding.html">Our Wedding</a></li>	
-          <li><a href="our_story">Our Story</a></li>
-          <li><a href="events.html">Events</a></li>
-          <li><a href="registry.html">Registry</a></li>
-          <li><a href="rsvp.html">RSVP</a></li>
-        </ul>           
+        <div class="topHead">
+          <div>  <i class="fa-solid fa-envelope"></i>
+            support@eyespy.com</div>
+          <div><i class="fa-solid fa-phone"></i>
+            (614)9054285</div>
+        </div> 
+        <div class="lowHead">
+          <ul>
+            <li><a href="wedding.html">Home</a></li>	
+            <li><a href="our_story">About</a></li>
+            <li><a href="events.html">Services</a></li>
+            <li><a href="registry.html">Contact</a></li>
+          </ul> 
+        </div>
+        <div class="ourLogo">
+          <img src="assets/logo.png">
+          <div>
+            EYESPY
+          </div>
+        </div>
+                  
   		</nav>	
     </header>
 
     <main>  
       <div class="hero">
-        <img src="images/home/sitingrass.jpg">
+        <div class="heroTxt">
+          <div class="bigFont">  Keep <b>Safe &</b> 
+            <br><b>Happy</b> Your Mind</div>
+          <div class="getAppointBtn">Get Appointment</div>
+        </div>
+        <img src="assets/securityCamera.png">
       </div>
 
-      <div class="names">
-        <h1>Rich &amp Dawn</h1>
-      </div> 
+      <div>
 
-      <div class="date">
-       <h2>8.14.16</h2>
       </div>
-  	  
-  	  <div class="container">
-        <div class="break_photos">
-          <img src="images/home/smileyrd.jpeg">
-        </div>
-  	  	  
-  			<div id="our_story"> 
-    			<h3>Our Story</h3>
-          <div class="explanation">
-			     <p>We began as pen pals introduced through eHarmony. Our first date was chaperoned by our lovely canine, Naya, as we walked and watched the Denver Holiday Parade of Lights. After a romantic first kiss in a dark and creepy alley, we continued to write, walk, talk and laugh together and have no intention of stopping. We enjoy exploring local pizza and ice cream parlors, hiking, reading, watching movies, playing games, dancing, and gathering with family and friends.</p>
-          </div> 
-			  </div>
-
-        <div class="break_photos">
-          <img src="images/home/serious.jpg">
-        </div>
-
-        <div id="events">
-          <h3>Ceremony, Dining, Dancing &amp more...</h3>
-            <p>Sunday, August 14, 2016</p>
-            <p>5pm 'til the moon beckons you to bed</p>
-            <p>14375 W 54th Ave, Arvada, CO</p>
-          <!-- make a cute announcement with Wedding and Reception date, time, address, dress code and lots of food, drinks, games and dancing! -->
-        </div>
-
-        <div class="break_photos">
-          <div id="three-hands">
-            <img src="images/home/threehands.jpg" alt="A happy photo of us Dawn and Rich at Lake George">
-          </div>  
-          </div> 
-        
-        <div id="Registry"> 
-          <h3>Registry</h3>
-          <div class="explanation">
-            <p>We feel blessed with plenty and know many around us are not so fortunate.  We invite you to take some time to volunteer in your community and/or donate to one of our favorite causes to help make the world a little better place.
-          </div>    
-        </div>
-        <div class="container">
-          <div class="row">
-            <div class="col-xs-12 col-sm-4">
-              <div id="col_oceana">
-                <img src="images/common/sharks.jpeg" class="img-responsive" alt="sharks">
-                <a href="http://oceana.org/"><h2>Oceana</h2></a>
-                <p></p>
-              </div>  
-            </div>
-
-            <div class="col-xs-12 col-sm-4">
-              <div id="col_fbr">
-                <img src="images/common/food.jpeg"  class="img-responsive" alt="food">
-                <a href="http://www.foodbankrockies.org/"><h2>Food Bank of the Rockies</h2></a>
-                <p></p>
-              </div>
-            </div>
-          
-            <div class="col-xs-12 col-sm-4">  
-              <div id="col_ddfl">
-                <img src="images/common/dog.jpeg" class="img-responsive" class="img-circle"alt="dog">
-                <a href="http://www.ddfl.org/"><h2>Denver Dumb Friends League</h2></a>
-                <p></p>
-              </div>  
-            </div>
-          </div>
-         </div> 
-        </div>
-
-      	<div id="rsvp">  
-          <button>RSVP</button>
-          <form action="mail.php" method="POST">
-  <!-- add the input elements here -->
-           <div class="rsvpform"> 
-             <div id="guestname">
-             <p>Simple Text Field with Options:</p>
-    <input type="text" name="guestname" placeholder="Guest's name" size="50" autofocus="on" maxlength="65" required />
-            </div>  
-             
-             <div id="rsvpbuttons">
-             <p>Radio Buttons:</p>
-    <input type="radio" name="attending" value="red">Attending<br />
-              <input type="radio" name="notattending" value="blue">Not Attending<br />      
-            </div>
-             
-            <div id="rsvpmessage">
-            <p>Leave a message for the bride and groom</p>
-            <input type="text" name="comments" placeholder="Your message here" size="20 rows" autofocus="on" required />  
-            </div> 
-             
-            <input type="submit" value="Submit" /> 
-            
-            
-           </div>  
-          </form>
-        </div>
-
-      	</main>	
+      </main>	
 		
 
 		<footer>
-			<p>We hope you can celebrate our Happily Ever After in the works with us!</p>	
+			<!-- <p>We hope you can be with our Happily Ever After in the works with us!</p>	 -->
 		</footer> 
-
+ 
 	</body>
 </html>	

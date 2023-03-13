@@ -1,0 +1,194 @@
+header {
+    height: 11em;
+    background-color: #fff;
+    padding-top: 1em;
+}
+
+
+.topnav {
+    margin-right: 7%;
+    margin-top: 10px;
+    list-style-type: none;
+    text-align: center;
+}
+
+.topnav p {
+    font: 1.5em 'Poiret One', cursive;
+    ;
+    margin-left: -27em;
+}
+
+.topnav ul li {
+    font-family: 10em 'Poiret One', cursive;
+    display: inline-block;
+    list-style-type: none;
+    padding: 3px;
+    margin-left: 5em;
+    margin-top: 5em;
+
+}
+
+a:link {
+    color: #616D76;
+}
+
+a:visited {
+    color: #ff1dc5;
+}
+
+a:hover {
+    color: #166F87;
+}
+
+a:active {
+    color: #ff1eed;
+}
+
+main {
+    min-height: 400px;
+    background-color: #fff;
+
+}
+
+.names {
+    font: 9em;
+    color: #166F87;
+    text-align: center;
+
+}
+
+.date {
+    font: 3em;
+    text-align: center;
+
+}
+
+.wrapper {
+    width: 980px;
+    margin: auto;
+    margin-top: 30px;
+    font-family: 2em 'PT Sans Narrow', sans-serif;
+    text-align: center;
+
+}
+
+.container #our_story {
+    background-size: 100%;
+}
+
+
+.container .row img {
+    border-radius: 50%;
+    min-height: 200px;
+}
+
+.row {
+    text-align: center;
+}
+
+.break_photos img {
+    max-width: 75%;
+    box-shadow: 5px 5px 5px gray;
+    display: block;
+    margin: auto;
+    margin-bottom: 5em;
+    min-height: 200px;
+}
+
+
+
+.hero img {
+    width: 100%;
+}
+
+.container {
+    margin-top: 5em;
+}
+
+.explanation {
+    margin: 0px 10em 5em;
+}
+
+h3 {
+    font: 3.5em;
+    text-align: center;
+}
+
+#events p {
+    font-family: 'Poiret One', cursive;
+    font-weight: bold;
+    text-align: center;
+
+}
+
+#events {
+    margin-bottom: 5em;
+}
+
+.column {
+    width: 300px;
+    float: left;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+#rsvp {
+    padding: 1em;
+    font: 20px bold;
+    margin: 2em 25em;
+}
+
+.rsvpform {
+    min-width: 30%;
+    margin: auto;
+    margin-top: 2em;
+
+}
+
+input [type=text] {
+    color: violet;
+    font-size: 12;
+}
+
+form p {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+/* Does not properly style text: */
+input[type="radio"] {
+    color: purple;
+    font-size: 16px;
+    /* Size effects bullet and padding */
+}
+
+/*
+  input[type=submit] {
+      border-radius:10px;
+      border: 0;
+      width: 80px;
+      height: 35px;
+      font-family: Tahoma;
+      background: #000;
+      color: #fff;
+  }
+  */
+
+footer {
+    height: 6em;
+    background-color: #bdcbd9;
+}
+
+footer p {
+    text-align: center;
+    padding: 3em 0;
+    font-family: 'Poiret One', cursive;
+}
+
+
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}

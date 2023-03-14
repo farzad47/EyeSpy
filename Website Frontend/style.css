@@ -1,4 +1,5 @@
 
+
 header {
     width: 100%;
     position: fixed;
@@ -9,15 +10,10 @@ header {
 
 body {
     font-size: 12px;
+
 }
 
-body {
-    -ms-overflow-style: none;
-    /* for Internet Explorer, Edge */
-    scrollbar-width: none;
-    /* for Firefox */
-    overflow-y: scroll;
-}
+
 
 body::-webkit-scrollbar {
     display: none;
@@ -27,6 +23,21 @@ body::-webkit-scrollbar {
 .topnav {
     list-style-type: none;
     text-align: center;
+}
+.topHead{
+    background-color: #151725;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    padding-left: 230px;
+    padding-right: 50px;
+}
+.topHead > div{
+    color: white;
+}
+.fa-envelope,.fa-phone{
+    color: #8cca8cf2 ;
 }
 
 .topHead {
@@ -54,29 +65,36 @@ body::-webkit-scrollbar {
     margin-left: -27em;
 }
 
+
 .lowHead>ul {
+
 
     margin: 10px;
     display: flex;
     padding-left: 145px;
 }
-
-.pageSelected>a {
+.lowHead > ul > li{
+    cursor: pointer;
+}
+.pageSelected {
     color: #5eb85e !important;
     font-weight: 600;
 }
 
 .ourLogo {
+
     height: 100px;
     width: 130px;
     background-color: #5eb85e;
     position: absolute;
     top: 0px;
     left: 60px;
+
     border-radius: 0px 0px 2px 2px;
 }
 
 .ourLogo>img {
+
     height: 50%;
     width: 50%;
     border-radius: 50% 50% 50% 50%;
@@ -86,7 +104,9 @@ body::-webkit-scrollbar {
 
 }
 
+
 .ourLogo>div {
+
     padding-top: 5px;
 }
 
@@ -178,16 +198,19 @@ main {
 }
 
 .getAppointBtn,.getDemoBtn {
+
     padding: 10px;
     background-color: #5eb85e;
     margin-top: 30px;
     margin-right: 185px;
     border-radius: 2px;
 }
+
 .getDemoBtn{
     margin-right: 0px !important;
 }
 .heroTxt {
+
     color: #ddd;
     position: absolute;
     /* align-items: baseline; */
@@ -202,6 +225,7 @@ main {
     width: 100%;
     height: 445px;
     object-fit: cover;
+
 }
 
 .getDemo>img {
@@ -337,7 +361,12 @@ main {
     border-radius: 2px;
     padding: 5px 15px;
 }
-
+.getDemoBtn,.getAppointBtn,.btn-login{
+  border:none;
+  color:#FFF;
+  font-family:Verdana, Geneva, sans-serif;
+  cursor:pointer;
+}
 footer {
     height: 3em;
     background-color: #bdcbd9;
@@ -348,3 +377,5 @@ footer p {
     padding: 3em 0;
     font-family: 'Poiret One', cursive;
 }
+
+

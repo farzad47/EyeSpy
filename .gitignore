@@ -1,0 +1,36 @@
+# These are some examples of commonly ignored file patterns.
+# You should customize this list as applicable to your project.
+# Learn more about .gitignore:
+#     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+
+# Log files
+*.log
+
+# Virtualenv
+.Python
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+.venv
+pip-selfcheck.json
+common/__pycache__
+app.log
+__pycache__
+.env
+.idea
+csv*
+*.log
+realis
+
+#VScode Files
+.vscode
+.vscode/launch.json
+test.py
+test.ipynb
+*code-workspace
+log/
+cx_Oracle-doc/

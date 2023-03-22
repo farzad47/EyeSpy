@@ -15,6 +15,7 @@ body {
 
 
 
+
 body::-webkit-scrollbar {
     display: none;
     /* for Chrome, Safari, and Opera */
@@ -73,6 +74,7 @@ body::-webkit-scrollbar {
     display: flex;
     padding-left: 145px;
 }
+
 .lowHead > ul > li{
     cursor: pointer;
 }
@@ -308,6 +310,7 @@ main {
 
 .processDivs>div>div {
     margin-bottom: 10px;
+
 }
 
 .processDivs>div {
@@ -377,5 +380,6 @@ footer p {
     padding: 3em 0;
     font-family: 'Poiret One', cursive;
 }
+
 
 

@@ -13,13 +13,8 @@ body {
 
 }
 
-body {
-    -ms-overflow-style: none;
-    /* for Internet Explorer, Edge */
-    scrollbar-width: none;
-    /* for Firefox */
-    overflow-y: scroll;
-}
+
+
 
 body::-webkit-scrollbar {
     display: none;
@@ -80,7 +75,10 @@ body::-webkit-scrollbar {
     padding-left: 145px;
 }
 
-.pageSelected>a {
+.lowHead > ul > li{
+    cursor: pointer;
+}
+.pageSelected {
     color: #5eb85e !important;
     font-weight: 600;
 }
@@ -312,6 +310,7 @@ main {
 
 .processDivs>div>div {
     margin-bottom: 10px;
+
 }
 
 .processDivs>div {
@@ -365,7 +364,12 @@ main {
     border-radius: 2px;
     padding: 5px 15px;
 }
-
+.getDemoBtn,.getAppointBtn,.btn-login{
+  border:none;
+  color:#FFF;
+  font-family:Verdana, Geneva, sans-serif;
+  cursor:pointer;
+}
 footer {
     height: 3em;
     background-color: #bdcbd9;
@@ -376,3 +380,6 @@ footer p {
     padding: 3em 0;
     font-family: 'Poiret One', cursive;
 }
+
+
+

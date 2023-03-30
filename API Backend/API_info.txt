@@ -1,0 +1,61 @@
+@all access
+# Security Check __POST__
+    input 
+    - face image (single image)
+    - building id
+    return
+    - ACk
+
+@all access
+# get_session __GET__
+    input 
+    - admin user
+    - adminm password
+    return
+    - session token
+
+@admin access
+# Add new people __PUT__
+    input 
+    - session token
+    - Name
+    - building id
+    - appartart no 
+    - images (around 10-20)
+    return 
+    - resident id
+
+@admin access
+# remove people __DELETE_
+    input
+    - session token
+    - building id
+    - resident id
+    return
+    - ACK
+
+@admin access
+# add building __PUT__
+    input
+    - session token
+    - Building Name
+    - isalert
+    - alerttype (1. all alert, 2. only new resident)
+    - alert-email
+    output 
+    - building id 
+
+@admin access __GET__
+# list building
+    input
+    - session token
+    return
+    - list of all building
+
+@admin access __GET__
+# list people
+    input
+    - session token
+    - building id
+    return
+    - list of all people

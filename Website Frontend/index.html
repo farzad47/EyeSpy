@@ -2,12 +2,17 @@
 <html lang="en">
 
 <head>
-		<title>EyeSpy</title>
-    <link href="style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-		<link href="style.css" rel="stylesheet" type="text/css" />
+
+  <title>EyeSpy</title>
+  <link href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+  <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -27,22 +32,55 @@
             <li class="Services">Services</li>
             <li class="Contact">Contact</li>
           </ul>
-  
-  <div class="btn-login">
-  Login
-  </div>    
-    </div>
+
+          <div class="btn-login">
+            Login
+          </div>
+        </div>
         <div class="ourLogo">
           <img src="assets/logo.png">
           <div>
             EYESPY
           </div>
         </div>
-  
+
       </nav>
     </header>
-  
+
     <main>
+      <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+      <div class="form-popup form-login" id="loginForm">
+        <form action="login.html" method="post" class="form-container" >
+          <label for="email"><b>Email</b></label>
+          <input type="email" placeholder="Enter Email" name="loginEmail" required>
+
+          <label for="name"><b>Password</b></label>
+          <input type="text" placeholder="Enter Password" name="loginPassword" required>
+          <br> </br>
+          <button type="submit" class="btn loginBtnSubmit">Submit</button>
+          <button type="button" class="btn cancel">Close</button>
+        </form>
+      </div>
+
+      <div class="form-popup" id="myForm">
+        <form action="#" method="post" class="form-container">
+          <h2>Get Demo Form</h2>
+          <label for="name"><b>Name</b></label>
+          <input type="text" placeholder="Enter Name" name="name" required>
+
+          <label for="email"><b>Email</b></label>
+          <input type="email" placeholder="Enter Email" name="email" required>
+
+          <label for="phone"><b>Phone Number</b></label>
+          <input type="tel" placeholder="Enter Phone Number" name="phone" required>
+
+          <label for="photos"><b>Attach 5 Photos</b></label>
+          <input type="file" name="photos[]" multiple accept="image/*">
+
+          <button type="submit" class="btn">Submit</button>
+          <button type="button" class="btn cancel">Close</button>
+        </form>
+      </div>
       <div class="hero">
         <div class="heroTxt">
           <div class="bigFont"> Keep <b>Safe &</b>
@@ -52,7 +90,7 @@
         </div>
         <img src="assets/securityCamera.png">
       </div>
-  
+
       <div class="ourOfferings">
         <div>
           <h2 class="hr-lines">offers</h2>
@@ -63,31 +101,32 @@
             <div> <i class="fa-solid fa-home"></i></div>
             <div class="bold offersTitle">Home <br>Security</div>
             <div>We Alert homeowners when an unauthorized person enters their home. </div>
-  
+
           </div>
           <div>
             <div> <i class="fa-solid fa-shield-halved"></i></div>
             <div class="bold offersTitle">Information <br>Security</div>
             <div>All the information collected is secured and can be accessed by authorized personal only</div>
-  
+
           </div>
           <div>
             <div><i class="fa-solid fa-message"></i></div>
             <div class="bold offersTitle">Real-Time <br>Alerts</div>
-            <div>We provide real-time alerts to homeowners, allowing them to take immediate action to protect their homes
+            <div>We provide real-time alerts to homeowners, allowing them to take immediate action to protect their
+              homes
               and their families. </div>
-  
+
           </div>
           <div>
             <div> <i class="fa-solid fa-headset"></i></div>
             <div class="bold offersTitle">Useful <br>Support</div>
             <div>Our customers can get help and find answers to questions as soon as they come up come up 24/7 and in
               real-time</div>
-  
+
           </div>
         </div>
       </div>
-  
+
       <div class="workingProcess">
         <div class="topic">
           <h2 class="hr-lines">process</h2>
@@ -110,41 +149,43 @@
             <div>You get alerts when any unauthorized person enters your house </div>
           </div>
         </div>
-  
+
       </div>
       <div class="getDemo">
         <div class="demoTxt">
-          <div> 
+          <div>
             <span style="font-size: 18px; font-weight: 600;">Looking for a demo of our service?</span>
-           <br> <span style="font-size:10px; color:#ddd;">click on the button below to test our service with your laptop camera</span>
+            <br> <span style="font-size:10px; color:#ddd;">click on the button below to test our service with your
+              laptop camera</span>
           </div>
           <div class="getDemoBtn">Get Demo</div>
         </div>
         <img src="assets/securityCamera2.png">
-       
+
       </div>
+
     </main>
-  
-  
+
+
     <footer>
-    
+
     </footer>
   </div>
   <div></div>
   <div></div>
-    
-   
-    
 
 
-  
+
+
+
+
   <!-- <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js" integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw="  crossorigin="anonymous"></script> -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-<script src="main.js"></script>
-
+  <script src="main.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,15 @@
+import vonage
+client = vonage.Client(key="da4d3b79", secret="UW6CTQ8TzaYOvCff")
+sms = vonage.Sms(client)
+responseData = sms.send_message(
+    {
+        "from": "Vonage APIs",
+        "to": "917893361429", '''Not working for US number'''
+        "text": "A text message sent using the Nexmo SMS API",
+    }
+)
+
+if responseData["messages"][0]["status"] == "0":
+    print("Message sent successfully.")
+else:
+    print(f"Message failed with error: {responseData['messages'][0]['error-text']}")

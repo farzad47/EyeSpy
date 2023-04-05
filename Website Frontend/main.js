@@ -44,32 +44,29 @@ function clickEvents(){
     });
     $(".loginBtnSubmit").on("click", function(e){
         if($('input[name="loginEmail"]').val() != '' & $('input[name="loginPassword"]').val() != ''){
-            location.href = "http://127.0.0.1:5500/Website%20Frontend/login.html";
+            window.location.href = "login.html";
         }
         
     })
-
-    $( ".getDemoBtn" ).on( "click", function() {
-        console.log( "click" );
-    });
-
     $('.getDemoBtn').on("click", function(){
-        $(".form-popup")[0].style.display = "block";
+        $(".form-demo")[0].style.display = "block";
     })
     $('.getAppointBtn').on("click",function(){
-        $(".form-popup")[0].style.display = "block";
+        $(".form-appointment")[0].style.display = "block";
     })
     $('.btn-login').on("click",function(){
-        $("#loginForm")[0].style.display = "block";
+        $(".form-login")[0].style.display = "block";
     })
     $('.getDemoBtn').on("click",function(){
-        $("#myForm")[0].style.display = "block";
+        $(".form-demo")[0].style.display = "block";
     })
     $('.btn-logout').on("click",function(){
         location.href = "index.html";
     })
     $('.cancel').on('click',function(){
-        $(".form-popup")[0].style.display = "none";
+        $(".form-demo")[0].style.display = "none";
+        $(".form-appointment")[0].style.display = "none";
+        $(".form-login")[0].style.display = "none";
     })
     function onSignIn(googleUser) {
         var id_token = googleUser.getAuthResponse().id_token;

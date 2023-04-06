@@ -1,0 +1,7 @@
+CREATE TABLE `login_details` (
+  `USER_ID` int NOT NULL AUTO_INCREMENT,
+  `USERNAME` varchar(100) NOT NULL,
+  `EMAIL` varchar(100) NOT NULL,
+  `PASSWORD` varchar(100) NOT NULL,
+  PRIMARY KEY (`USER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_c

@@ -1,0 +1,11 @@
+CREATE TABLE sys.person_detail (
+	PERSON_ID INT auto_increment NOT NULL,
+	PERSON_NAME VARCHAR(100) NOT NULL,
+	EMAIL_ID varchar(100) NOT NULL,
+	PHONE_NUMBER varchar(100) auto_increment NOT NULL,
+	ADDRESS varchar(100) NOT NULL,
+	PHOTOS varchar(100) NULL
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;

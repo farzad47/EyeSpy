@@ -4,4 +4,4 @@ CREATE TABLE `login_details` (
   `EMAIL` varchar(100) NOT NULL,
   `PASSWORD` varchar(100) NOT NULL,
   PRIMARY KEY (`USER_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_c
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

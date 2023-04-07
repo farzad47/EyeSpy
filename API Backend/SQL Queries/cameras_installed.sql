@@ -1,9 +1,7 @@
-CREATE TABLE sys.cameras_installed (
-	CAM_ID INT auto_increment NOT NULL,
-	CAM_LOCATION LONGTEXT NULL,
-	CAM_ADDRESS LONGTEXT NULL,
-	CAM_IP varchar(100) auto_increment NOT NULL
-)
-ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `cameras_installed` (
+  `CAM_ID` int NOT NULL AUTO_INCREMENT,
+  `CAM_LOCATION` longtext,
+  `CAM_ADDRESS` longtext,
+  `CAM_IP` varchar(100) NOT NULL,
+  PRIMARY KEY (`CAM_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

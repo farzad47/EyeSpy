@@ -1,8 +1,10 @@
 import os
 import cv2 as cv
 import numpy as np
-
-
+from PIL import Image
+import requests
+from io import BytesIO
+#import mysql.connector as sql
 
 #List of authorized individuals
 authorized = []
@@ -14,6 +16,16 @@ haar = cv.CascadeClassifier('haar_face.xml')
 dir_auth = "Auth_Individuals"
 
 #Get List of authorized individuals (as their directories)
+awsImages = ["https://ibb.co/7gBSLbn","https://ibb.co/RSGXvBT","https://ibb.co/RSGXvBT"]
+awsName = "Anusha"
+
+if not os.path.exists(os.path.join(dir_auth,awsName)):
+   os.makedirs(os.path.join(dir_auth,awsName))
+
+#for url in awsImages:
+#    response = requests.get(url)
+#    responseImg = Image.open(BytesIO(response.content))
+
 for i in os.listdir(dir_auth):
     authorized.append(i)
 #Print list of authorized individuals
@@ -59,6 +71,8 @@ def LiveVideo():
     #Video Input Capture [0 corresponds to laptop webcam]
     cpt = cv.VideoCapture(0)
 
+    authorization = "Authorized"
+
     while True:
         # Read each frame of the video
         isTrue, frame = cpt.read()
@@ -74,9 +88,12 @@ def LiveVideo():
             cv.rectangle(grayFrame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
 
         label, confidence = face_recognizer.predict(faces_region)
-        print(f'Label = {authorized[label]} with a confidence of {confidence}')
+        #print(f'Label = {authorized[label]} with a confidence of {confidence}')
 
-        cv.putText(grayFrame, str(authorized[label]), (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
+        if(confidence > 100):
+            authorization = "Unauthorized"
+
+        cv.putText(grayFrame, authorization, (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
         #Display video with rectangles
         cv.imshow('Video', grayFrame)
@@ -85,8 +102,11 @@ def LiveVideo():
         if cv.waitKey(20) & 0xFF==ord('d'):
             break
 
+        if(len(faces_rect) == 0):
+            break
+
     #Stop capturing and remove video display window(s)
-    capture.release()
+    cpt.release()
     cv.destroyAllWindows()
 
 #TestAccuracy()

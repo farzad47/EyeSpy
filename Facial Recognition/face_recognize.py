@@ -6,17 +6,26 @@ import requests
 from io import BytesIO
 import mysql.connector as sql
 
-database = sql.connect(
-    host="localhost",
-    user="db-user",
-    password="db-pass"
+#Make connection to the SQL Host
+db = sql.connect(
+    host="database-eyespy.cyvbyvilxbbf.us-east-2.rds.amazonaws.com",
+    user="admin",
+    password="Master123",
+    database="sys"
 )
 
-cursor = database.cursor()
+#Object that allows us to write SQL statements for database
+cursor = db.cursor(buffered=True)
 
+#Execute a query for everything in the person_detail database/(table?)
 cursor.execute("SELECT * FROM person_detail")
 
+#Store restults of the query so we can parse through them
 qResults = cursor.fetchall()
+
+#Print the results in console
+for row in qResults:
+    print(row)
 
 #List of authorized individuals
 authorized = []
@@ -102,7 +111,7 @@ def LiveVideo():
 
         if(len(faces_rect) != 0):
             label, confidence = face_recognizer.predict(faces_region)
-            print(f'Label = {authorized[label]} with a confidence of {confidence}')
+            #print(f'Label = {authorized[label]} with a confidence of {confidence}')
 
             if(confidence > 100):
                 authorization = "Unauthorized"
@@ -116,7 +125,7 @@ def LiveVideo():
         if cv.waitKey(20) & 0xFF==ord('d'):
             break
 
-        #Stop reading if no face is detected
+        Stop reading if no face is detected
         if(len(faces_rect) == 0):
             break
 

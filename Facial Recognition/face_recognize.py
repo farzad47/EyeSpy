@@ -15,19 +15,13 @@ haar = cv.CascadeClassifier('haar_face.xml')
 #Directory holding authorized individuals
 dir_auth = "Auth_Individuals"
 
-#Get List of authorized individuals (as their directories)
-awsImages = ["https://ibb.co/7gBSLbn","https://ibb.co/RSGXvBT","https://ibb.co/RSGXvBT"]
-awsName = "Anusha"
-
-if not os.path.exists(os.path.join(dir_auth,awsName)):
-   os.makedirs(os.path.join(dir_auth,awsName))
-
-#for url in awsImages:
-#    response = requests.get(url)
-#    responseImg = Image.open(BytesIO(response.content))
+# Create new authorized individual folder if not exists
+# if not os.path.exists(os.path.join(dir_auth,awsName)):
+#    os.makedirs(os.path.join(dir_auth,awsName))
 
 for i in os.listdir(dir_auth):
     authorized.append(i)
+
 #Print list of authorized individuals
 print(authorized)
 
@@ -88,7 +82,7 @@ def LiveVideo():
             cv.rectangle(grayFrame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
 
         label, confidence = face_recognizer.predict(faces_region)
-        #print(f'Label = {authorized[label]} with a confidence of {confidence}')
+        print(f'Label = {authorized[label]} with a confidence of {confidence}')
 
         if(confidence > 100):
             authorization = "Unauthorized"

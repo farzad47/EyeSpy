@@ -4,7 +4,19 @@ import numpy as np
 from PIL import Image
 import requests
 from io import BytesIO
-#import mysql.connector as sql
+import mysql.connector as sql
+
+database = sql.connect(
+    host="localhost",
+    user="db-user",
+    password="db-pass"
+)
+
+cursor = database.cursor()
+
+cursor.execute("SELECT * FROM person_detail")
+
+qResults = cursor.fetchall()
 
 #List of authorized individuals
 authorized = []
@@ -15,13 +27,20 @@ haar = cv.CascadeClassifier('haar_face.xml')
 #Directory holding authorized individuals
 dir_auth = "Auth_Individuals"
 
-# Create new authorized individual folder if not exists
-# if not os.path.exists(os.path.join(dir_auth,awsName)):
-#    os.makedirs(os.path.join(dir_auth,awsName))
+#Get List of authorized individuals (as their directories)
+awsImages = ["http://dcproject123456.s3-website.us-east-2.amazonaws.com/imageUpload/WIN_20230405_16_35_06_Pro.jpg",
+            "http://dcproject123456.s3-website.us-east-2.amazonaws.com/imageUpload/WIN_20230405_16_35_08_Pro.jpg"]
+awsName = "Anusha"
+
+if not os.path.exists(os.path.join(dir_auth,awsName)):
+   os.makedirs(os.path.join(dir_auth,awsName))
+
+for url in awsImages:
+    response = requests.get(url)
+    responseImg = Image.open(BytesIO(response.content))
 
 for i in os.listdir(dir_auth):
     authorized.append(i)
-
 #Print list of authorized individuals
 print(authorized)
 
@@ -81,21 +100,23 @@ def LiveVideo():
             faces_region = grayFrame[y:y+h,x:x+h]
             cv.rectangle(grayFrame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
 
-        label, confidence = face_recognizer.predict(faces_region)
-        print(f'Label = {authorized[label]} with a confidence of {confidence}')
+        if(len(faces_rect) != 0):
+            label, confidence = face_recognizer.predict(faces_region)
+            print(f'Label = {authorized[label]} with a confidence of {confidence}')
 
-        if(confidence > 100):
-            authorization = "Unauthorized"
+            if(confidence > 100):
+                authorization = "Unauthorized"
 
-        cv.putText(grayFrame, authorization, (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
+            cv.putText(grayFrame, authorization, (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
-        #Display video with rectangles
-        cv.imshow('Video', grayFrame)
+            #Display video with rectangles
+            cv.imshow('Video', grayFrame)
 
         #Stop reading if 'D' key is pressed
         if cv.waitKey(20) & 0xFF==ord('d'):
             break
 
+        #Stop reading if no face is detected
         if(len(faces_rect) == 0):
             break
 

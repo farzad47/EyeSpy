@@ -14,9 +14,7 @@ headers = {
 	'cache-control': "no-cache"
 }
 try:
-	response = requests.request("GET", url,
-								headers = headers,
-								params = querystring)
+	response = requests.request("GET", url, headers = headers, params = querystring)
 	
 	print("SMS Successfully Sent")
 except:

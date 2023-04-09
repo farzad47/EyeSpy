@@ -12,8 +12,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
     integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1352.0/aws-sdk.min.js" integrity="sha512-TZm51eaqRhqGFXBcVZIqm/vP3a/pH5PKB6q9hSUN1TZ1tMmhe+QbSuxMs02iJmlGjak9EO/j0L4D2hBm5PgYpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1352.0/aws-sdk.js" integrity="sha512-AuSqaqfUCKvrmPYYRJ9vQvF6ANEdXS7/PO8Uw57/RPb2kJ3xUyKr7ToePYxigSdXrhIQ8V39k8pQcjbHDZtRzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link href="style.css" rel="stylesheet" type="text/css" />
+   <!-- linking to PyScript assets -->
+   <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+   <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.min.js" integrity="sha512-nnNHpffPSgINrsR8ZAIgFUIMexORL5tPwsfktOTxVYSv+AUAILuFYWES8IHl+hhIhpFGlKvWFiz9ZEusrPcSBQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.js" integrity="sha512-UOPGGJGJDgYLHr0jkg4Ie9q0+ote8ofDM+vNdxw8sjPWV2/BnY6nY3zKy9N02HQX5QFk+QcHC1jcoDoSH2PgFw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
+
 
 <body>
   <div class="pt-page-1">
@@ -47,7 +56,7 @@
       </nav>
     </header>
 
-    <main>
+    <main class="home-page">
       <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
       <div class="form-popup form-login" id="loginForm">
         <form method="post" class="form-container" >
@@ -79,7 +88,7 @@
       </div>
 
       <div class="form-popup form-demo" id="myForm">
-        <form action="#" method="post" class="form-container">
+        <form method="post" class="form-container">
           <h2>Get Demo Form</h2>
           <label for="name"><b>Name</b></label>
           <input type="text" placeholder="Enter Name" name="name" required>
@@ -93,7 +102,7 @@
           <label for="photos"><b>Attach 5 Photos</b></label>
           <input type="file" name="photos[]" multiple accept="image/*">
 
-          <button type="submit" class="btn">Submit</button>
+          <button type="button" class="btn-demoSubmit btn">Submit</button>
           <button type="button" class="btn cancel">Close</button>
         </form>
       </div>
@@ -184,24 +193,37 @@
 
     </main>
 
-
     <footer>
+
 
     </footer>
   </div>
+  <div class="DemoScreen hide">
+    Demo screen
+  </div>
   <div></div>
-  <div></div>
 
+  <!-- <py-config>
+    packages = ["matplotlib", "pandas"]
+  </py-config>
+  <py-script src="../Facial Recognition/face_recognize.py"></py-script> -->
 
+  <!-- <py-config>
+    packages = [
+     "numpy",
+     "matplotlib"
+    ]
+  </py-config> -->
 
-
+  <py-script src="../Facial Recognition/face_recognize.py">
+  </py-script>
 
 
   <!-- <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js" integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw="  crossorigin="anonymous"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
 
   <script src="main.js"></script>
 </body>

@@ -5,6 +5,7 @@ from PIL import Image
 import requests
 from io import BytesIO
 import mysql.connector as sql
+from Final_Text_Alert_Generation import *
 
 #Make connection to the SQL Host
 db = sql.connect(
@@ -17,18 +18,44 @@ db = sql.connect(
 #Object that allows us to write SQL statements for database
 cursor = db.cursor(buffered=True)
 
-#Execute a query for everything in the person_detail database/(table?)
-cursor.execute("SELECT * FROM person_detail")
+#Specifying CameraID - This would be dynamic in real-world model
+cameraID = 1
 
-#Store restults of the query so we can parse through them
+#Execute a query to find the current camera ID
+cursor.execute("SELECT * FROM customer_cam_mapping WHERE CAM_ID LIKE " + str(cameraID))
+qResults = cursor.fetchall()
+
+customerID = qResults[0][0]
+
+#Execute a query to find the owner of the camera
+cursor.execute("SELECT * FROM authorized_customer_mapping WHERE CUSTOMER_ID LIKE " +  str(customerID))
+qResults = cursor.fetchall()
+
+#List of authorized individuals
+authorized = []
+authorizedID = []
+
+#Creating list of authorized ID's
+for row in qResults:
+    authorizedID.append(row[2])
+
+#Start of next query
+detailQuery = "SELECT * FROM person_detail WHERE "
+
+#Include only each authorized ID in this query
+for i in range(len(authorizedID)):
+    detailQuery += ("PERSON_ID LIKE " + str(authorizedID[i]))
+    if i < len(authorizedID) - 1:
+        detailQuery += " OR "
+
+#Execute query to find each authorized individual for the given camera/address
+cursor.execute(detailQuery)
 qResults = cursor.fetchall()
 
 #Print the results in console
 for row in qResults:
     print(row)
 
-#List of authorized individuals
-authorized = []
 
 #Declaring classifier as haar cascade face detection
 haar = cv.CascadeClassifier('haar_face.xml')
@@ -36,20 +63,9 @@ haar = cv.CascadeClassifier('haar_face.xml')
 #Directory holding authorized individuals
 dir_auth = "Auth_Individuals"
 
-#Get List of authorized individuals (as their directories)
-awsImages = ["http://dcproject123456.s3-website.us-east-2.amazonaws.com/imageUpload/WIN_20230405_16_35_06_Pro.jpg",
-            "http://dcproject123456.s3-website.us-east-2.amazonaws.com/imageUpload/WIN_20230405_16_35_08_Pro.jpg"]
-awsName = "Anusha"
-
-if not os.path.exists(os.path.join(dir_auth,awsName)):
-   os.makedirs(os.path.join(dir_auth,awsName))
-
-for url in awsImages:
-    response = requests.get(url)
-    responseImg = Image.open(BytesIO(response.content))
-
 for i in os.listdir(dir_auth):
     authorized.append(i)
+    
 #Print list of authorized individuals
 print(authorized)
 
@@ -115,6 +131,9 @@ def LiveVideo():
 
             if(confidence > 100):
                 authorization = "Unauthorized"
+                print("Unauthorized individual detected")
+                #sendEmail()
+                break
 
             cv.putText(grayFrame, authorization, (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
@@ -125,15 +144,15 @@ def LiveVideo():
         if cv.waitKey(20) & 0xFF==ord('d'):
             break
 
-        Stop reading if no face is detected
-        if(len(faces_rect) == 0):
-            break
+        #Stop reading if no face is detected
+        #if(len(faces_rect) == 0):
+        #    break
 
     #Stop capturing and remove video display window(s)
     cpt.release()
     cv.destroyAllWindows()
 
 #TestAccuracy()
-LiveVideo()
+#LiveVideo()
 
 cv.waitKey(0)

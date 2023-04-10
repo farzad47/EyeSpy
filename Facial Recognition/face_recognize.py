@@ -107,7 +107,7 @@ def LiveVideo():
     cpt = cv.VideoCapture(0)
 
     #Variables for alerts
-    queryInsert = False
+    queryInsert = []
     emailSent = False
 
     while True:
@@ -136,10 +136,10 @@ def LiveVideo():
                 emailSent = True
                 
                 #Archive record of person detected
-                if not queryInsert:
+                if queryInsert.count(details[0][0]) < 1:
                     cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('UNKNOWN','Yes',"+ str(customerID) +",'UNAUTHORIZED','0')")
                     db.commit()
-                    queryInsert = True
+                    queryInsert.append(0)
 
             #Determine the name of the authorized individual
             else:
@@ -148,10 +148,10 @@ def LiveVideo():
                 authorization = details[0][1]
                 
                 #Archive record of person detected
-                if not queryInsert:
+                if queryInsert.count(details[0][0]) < 1:
                     cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('"+ str(details[0][1]) +"','No','"+ str(customerID) +"','AUTHORIZED','"+ str(details[0][0]) +"')")
                     db.commit()
-                    queryInsert = True
+                    queryInsert.append(details[0][0])
 
             #Display Authorization level of each person in frame
             for (x,y,w,h) in faces_rect:

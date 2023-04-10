@@ -1,0 +1,4 @@
+04-09-2023
+While the user is recieveing the text message, there should be a proper subject visible istead of "/no subject/".
+Inputs are default in the code till now. They should be connected to the database to be able to allow users to change the owner of the house or the person who can recieve the alerts.
+Above changes will be made in the follow up commits.

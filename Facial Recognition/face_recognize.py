@@ -1,48 +1,70 @@
 import os
 import cv2 as cv
 import numpy as np
-from PIL import Image
-import requests
-from io import BytesIO
 import mysql.connector as sql
+from Final_Text_Alert_Generation import *
 
-database = sql.connect(
-    host="localhost",
-    user="db-user",
-    password="db-pass"
+#Make connection to the SQL Host
+db = sql.connect(
+    host="database-eyespy.cyvbyvilxbbf.us-east-2.rds.amazonaws.com",
+    user="admin",
+    password="Master123",
+    database="sys"
 )
 
-cursor = database.cursor()
+#Object that allows us to write SQL statements for database
+cursor = db.cursor(buffered=True)
 
-cursor.execute("SELECT * FROM person_detail")
+#Specifying CameraID - This would be dynamic in real-world model
+cameraID = 1
 
+#Execute a query to find the current camera ID
+cursor.execute("SELECT * FROM customer_cam_mapping WHERE CAM_ID LIKE " + str(cameraID))
+qResults = cursor.fetchall()
+
+customerID = qResults[0][0]
+
+#Execute a query to find the owner of the camera
+cursor.execute("SELECT * FROM authorized_customer_mapping WHERE CUSTOMER_ID LIKE " +  str(customerID))
 qResults = cursor.fetchall()
 
 #List of authorized individuals
 authorized = []
+authorizedID = []
+
+#Creating list of authorized ID's
+for row in qResults:
+    authorizedID.append(row[2])
+
+#Get the details for the customer (account owner)
+cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(customerID))
+customerResult = cursor.fetchall()
+
+#Retrieving customer information for alert generation
+customerPhone = customerResult[0][3]
+customerEmail = customerResult[0][2]
+customerCarrier = customerResult[0][6]
+
+#Start of next query
+detailQuery = "SELECT * FROM person_detail WHERE "
+
+#Include only each authorized ID in this query
+for i in range(len(authorizedID)):
+    detailQuery += ("PERSON_ID LIKE " + str(authorizedID[i]))
+    if i < len(authorizedID) - 1:
+        detailQuery += " OR "
+
+#Execute query to find each authorized individual for the given camera/address
+cursor.execute(detailQuery)
+qResults = cursor.fetchall()
+
+#Print the results in console
+for row in qResults:
+    authorized.append(row[1])
+
 
 #Declaring classifier as haar cascade face detection
 haar = cv.CascadeClassifier('haar_face.xml')
-
-#Directory holding authorized individuals
-dir_auth = "Auth_Individuals"
-
-#Get List of authorized individuals (as their directories)
-awsImages = ["http://dcproject123456.s3-website.us-east-2.amazonaws.com/imageUpload/WIN_20230405_16_35_06_Pro.jpg",
-            "http://dcproject123456.s3-website.us-east-2.amazonaws.com/imageUpload/WIN_20230405_16_35_08_Pro.jpg"]
-awsName = "Anusha"
-
-if not os.path.exists(os.path.join(dir_auth,awsName)):
-   os.makedirs(os.path.join(dir_auth,awsName))
-
-for url in awsImages:
-    response = requests.get(url)
-    responseImg = Image.open(BytesIO(response.content))
-
-for i in os.listdir(dir_auth):
-    authorized.append(i)
-#Print list of authorized individuals
-print(authorized)
 
 #Image arrays of faces
 features = np.load('features.npy', allow_pickle=True)
@@ -84,7 +106,9 @@ def LiveVideo():
     #Video Input Capture [0 corresponds to laptop webcam]
     cpt = cv.VideoCapture(0)
 
-    authorization = "Authorized"
+    #Variables for alerts
+    queryInsert = []
+    emailSent = False
 
     while True:
         # Read each frame of the video
@@ -100,24 +124,44 @@ def LiveVideo():
             faces_region = grayFrame[y:y+h,x:x+h]
             cv.rectangle(grayFrame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
 
+        #Predict confidence for any face detected
         if(len(faces_rect) != 0):
             label, confidence = face_recognizer.predict(faces_region)
-            print(f'Label = {authorized[label]} with a confidence of {confidence}')
+            authorization = "Authorized"
 
-            if(confidence > 100):
+            #Send alert if unauthorized individual is detected
+            if(confidence > 100 and not emailSent):
                 authorization = "Unauthorized"
+                sendEmail(customerPhone, customerCarrier, customerEmail)
+                emailSent = True
+                
+                #Archive record of person detected
+                if queryInsert.count(details[0][0]) < 1:
+                    cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('UNKNOWN','Yes',"+ str(customerID) +",'UNAUTHORIZED','0')")
+                    db.commit()
+                    queryInsert.append(0)
 
-            cv.putText(grayFrame, authorization, (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
+            #Determine the name of the authorized individual
+            else:
+                cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(label))
+                details = cursor.fetchall()
+                authorization = details[0][1]
+                
+                #Archive record of person detected
+                if queryInsert.count(details[0][0]) < 1:
+                    cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('"+ str(details[0][1]) +"','No','"+ str(customerID) +"','AUTHORIZED','"+ str(details[0][0]) +"')")
+                    db.commit()
+                    queryInsert.append(details[0][0])
+
+            #Display Authorization level of each person in frame
+            for (x,y,w,h) in faces_rect:
+                cv.putText(grayFrame, authorization, (x,y-5), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
             #Display video with rectangles
-            cv.imshow('Video', grayFrame)
+            cv.imshow('Live-Feed', grayFrame)
 
         #Stop reading if 'D' key is pressed
         if cv.waitKey(20) & 0xFF==ord('d'):
-            break
-
-        #Stop reading if no face is detected
-        if(len(faces_rect) == 0):
             break
 
     #Stop capturing and remove video display window(s)

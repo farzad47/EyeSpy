@@ -1,0 +1,4 @@
+When Face is detected by the Security camera
+-Lets the person go in to the house
+Else
+-Sends an email and text message to the owner of the house

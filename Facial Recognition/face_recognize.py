@@ -40,11 +40,10 @@ for row in qResults:
 cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(customerID))
 customerResult = cursor.fetchall()
 
+#Retrieving customer information for alert generation
 customerPhone = customerResult[0][3]
 customerEmail = customerResult[0][2]
 customerCarrier = customerResult[0][6]
-
-print(customerResult)
 
 #Start of next query
 detailQuery = "SELECT * FROM person_detail WHERE "
@@ -107,7 +106,9 @@ def LiveVideo():
     #Video Input Capture [0 corresponds to laptop webcam]
     cpt = cv.VideoCapture(0)
 
-    authorization = "Authorized"
+    #Variables for alerts
+    queryInsert = False
+    emailSent = False
 
     while True:
         # Read each frame of the video
@@ -123,17 +124,38 @@ def LiveVideo():
             faces_region = grayFrame[y:y+h,x:x+h]
             cv.rectangle(grayFrame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
 
+        #Predict confidence for any face detected
         if(len(faces_rect) != 0):
             label, confidence = face_recognizer.predict(faces_region)
-            #print(f'Label = {authorized[label]} with a confidence of {confidence}')
+            authorization = "Authorized"
 
-            if(confidence > 100):
+            #Send alert if unauthorized individual is detected
+            if(confidence > 100 and not emailSent):
                 authorization = "Unauthorized"
-                print("Unauthorized individual detected" + customerPhone)
                 sendEmail(customerPhone, customerCarrier, customerEmail)
-                break
+                emailSent = True
+                
+                #Archive record of person detected
+                if not queryInsert:
+                    cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('UNKNOWN','Yes',"+ str(customerID) +",'UNAUTHORIZED','0')")
+                    db.commit()
+                    queryInsert = True
 
-            cv.putText(grayFrame, authorization, (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
+            #Determine the name of the authorized individual
+            else:
+                cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(label))
+                details = cursor.fetchall()
+                authorization = details[0][1]
+                
+                #Archive record of person detected
+                if not queryInsert:
+                    cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('"+ str(details[0][1]) +"','No','"+ str(customerID) +"','AUTHORIZED','"+ str(details[0][0]) +"')")
+                    db.commit()
+                    queryInsert = True
+
+            #Display Authorization level of each person in frame
+            for (x,y,w,h) in faces_rect:
+                cv.putText(grayFrame, authorization, (x,y-5), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
             #Display video with rectangles
             cv.imshow('Live-Feed', grayFrame)
@@ -141,10 +163,6 @@ def LiveVideo():
         #Stop reading if 'D' key is pressed
         if cv.waitKey(20) & 0xFF==ord('d'):
             break
-
-        #Stop reading if no face is detected
-        #if(len(faces_rect) == 0):
-        #    break
 
     #Stop capturing and remove video display window(s)
     cpt.release()

@@ -30,7 +30,7 @@ def sendEmail(phoneNumber, carrier, email):
 
     ## Plain text
     text = """\
-	An UnAuthorized Person has been recognized."""
+	An Unauthorized Person has been recognized."""
 
     body_text = MIMEText(text, 'plain')  # 
     msg.attach(body_text)  # attaching the text body into msg

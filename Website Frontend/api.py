@@ -81,8 +81,8 @@ def sub():
   carrier=data['carrier']
   address = data['address']
   mycursor.execute("Insert into person_detail(PERSON_NAME,EMAIL_ID,PHONE_NUMBER,ADDRESS,carrier_detail) values('"+ name +"','"+ email +"','"+ phone +"','"+ address +"','"+ carrier +"');")
-
-  results = mycursor.fetchall()
+  mydb.commit()
+  results = mycursor.rowcount
   return results
 # Close the connection
   mydb.close()

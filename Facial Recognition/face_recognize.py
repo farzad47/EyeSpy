@@ -1,9 +1,6 @@
 import os
 import cv2 as cv
 import numpy as np
-from PIL import Image
-import requests
-from io import BytesIO
 import mysql.connector as sql
 from Final_Text_Alert_Generation import *
 
@@ -39,6 +36,16 @@ authorizedID = []
 for row in qResults:
     authorizedID.append(row[2])
 
+#Get the details for the customer (account owner)
+cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(customerID))
+customerResult = cursor.fetchall()
+
+customerPhone = customerResult[0][3]
+customerEmail = customerResult[0][2]
+customerCarrier = customerResult[0][6]
+
+print(customerResult)
+
 #Start of next query
 detailQuery = "SELECT * FROM person_detail WHERE "
 
@@ -54,20 +61,11 @@ qResults = cursor.fetchall()
 
 #Print the results in console
 for row in qResults:
-    print(row)
+    authorized.append(row[1])
 
 
 #Declaring classifier as haar cascade face detection
 haar = cv.CascadeClassifier('haar_face.xml')
-
-#Directory holding authorized individuals
-dir_auth = "Auth_Individuals"
-
-for i in os.listdir(dir_auth):
-    authorized.append(i)
-    
-#Print list of authorized individuals
-print(authorized)
 
 #Image arrays of faces
 features = np.load('features.npy', allow_pickle=True)
@@ -131,14 +129,14 @@ def LiveVideo():
 
             if(confidence > 100):
                 authorization = "Unauthorized"
-                print("Unauthorized individual detected")
-                #sendEmail()
+                print("Unauthorized individual detected" + customerPhone)
+                sendEmail(customerPhone, customerCarrier, customerEmail)
                 break
 
             cv.putText(grayFrame, authorization, (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
             #Display video with rectangles
-            cv.imshow('Video', grayFrame)
+            cv.imshow('Live-Feed', grayFrame)
 
         #Stop reading if 'D' key is pressed
         if cv.waitKey(20) & 0xFF==ord('d'):
@@ -153,6 +151,6 @@ def LiveVideo():
     cv.destroyAllWindows()
 
 #TestAccuracy()
-#LiveVideo()
+LiveVideo()
 
 cv.waitKey(0)

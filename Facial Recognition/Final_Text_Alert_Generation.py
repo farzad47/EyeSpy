@@ -13,17 +13,18 @@ CARRIERS = {
 EMAIL = "spidermanofspider@gmail.com"
 PASSWORD = "ixuqbmljbxgvzcig"
 
-def sendEmail():
+def sendEmail(phoneNumber, carrier, email):
     smtp_server = "smtp.gmail.com"
     port = 587  # For starttls
     sender_email = EMAIL # TODO: replace with your email address
-    receiver_email = ["saikrishnakittu0209@gmail.com","teja91715@gmail.com"] # TODO: replace with your recipients
+    receiver_email = [email] # TODO: replace with your recipients
     password = PASSWORD  # TODO: replace with your 16-digit-character password 
-    recipient = "+14196897222" + CARRIERS["tmobile"]
+    recipient = "+1" + phoneNumber + CARRIERS[carrier]
+    print(recipient)
 
     #Una
     msg = MIMEMultipart()
-    msg["Subject"] = "UnAuthorized Person Recognized"
+    msg["Subject"] = "Unauthorized Person Detected"
     msg["From"] = sender_email
     msg['To'] = ", ".join(receiver_email)
 
@@ -53,4 +54,3 @@ def sendEmail():
     finally:
         server.quit()
 
-sendEmail()

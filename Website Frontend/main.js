@@ -42,9 +42,14 @@ function clickEvents() {
         }
     });
     $(".loginBtnSubmit").on("click", function (e) {
-        if ($('input[name="loginEmail"]').val() != '' & $('input[name="loginPassword"]').val() != '') {
-            window.location.href = "login.html";
+        email = $('input[name="loginEmail"]').val()
+        pass = $('input[name="loginPassword"]').val()
+        if (email != '' & pass != '') {
+            $(".error").addClass('hide')
+            checkLogin(email,pass)
+            
         }
+        
     })
     $('.getDemoBtn').on("click", function () {
         $(".form-demo")[0].style.display = "block";
@@ -59,6 +64,7 @@ function clickEvents() {
         $(".form-demo")[0].style.display = "block";
     })
     $('.btn-logout').on("click", function () {
+        localStorage.clear()
         location.href = "index.html";
     })
     $('.cancel').on('click', function () {
@@ -69,7 +75,24 @@ function clickEvents() {
     $('.btn-demoSubmit').on("click", function (event) {
         event.preventDefault();
         $(".DemoScreen").removeClass('hide')
-        goPython()
+        var theFormFile = $('#theFile').get()[0].files[0];
+  $.ajax({
+    type: 'PUT',
+    url: uploadPreSignedUrl,
+    // Content type must much with the parameter you signed your URL with
+    contentType: 'binary/octet-stream',
+    // this flag is important, if not set, it will try to send data as a form
+    processData: false,
+    // the actual file is sent raw
+    data: theFormFile
+  })
+  .success(function() {
+    alert('File uploaded');
+  })
+  .error(function() {
+    alert('File NOT uploaded');
+    console.log( arguments);
+  });
     })
 
     function goPython(){
@@ -85,63 +108,7 @@ function clickEvents() {
     // console.log(uploadedImage.Location)
 }
 
-async function uploadtoS3(){
-    toDataUrl($('input')[7].files[0], function(base64Img) {
-        console.log(base64Img);
-    });
-    // loadXHR($('input')[7].files[0])
-    // const s3 = new AWS.S3({
-    //     accessKeyId: "AKIAYYI7C6SJFZEPVLW4",
-    //     secretAccessKey: "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",
-    // })
 
-    // const uploadedImage = await s3.upload({
-    //     Bucket: 'dcproject123456',
-    //     Key: $('input').files[0].originalFilename,
-    //     Body: blob,
-    // }).promise()
-    
-
-    // e.preventDefault();
-    // debugger;
-	// the_file = $('input')[7].files[0]; //get the file element
-	// var filename = Date.now() + '.' + the_file.name.split('.').pop(); //make file name unique using current time (milliseconds)
-	// $(this).find("input[name=key]").val(filename); //key name 
-	// $(this).find("input[name=Content-Type]").val(the_file.type); //content type
-	
-    // var post_url = $(this).attr("action"); //get form action url
-    // var form_data = new FormData(); //Creates new FormData object
-    // $.ajax({
-    //     url : 'https://www.google.com',
-    //     type: 'post',
-	// 	datatype: 'xml',
-    //     data : form_data,
-	// 	contentType: false,
-    //     processData:false,
-	// 	xhr: function(){
-	// 		var xhr = $.ajaxSettings.xhr();
-    //         debugger;
-	// 		if (xhr.upload){
-	// 			var progressbar = $("<div>", { style: "background:#607D8B;height:10px;margin:10px 0;" }).appendTo("#results"); //create progressbar
-	// 			xhr.upload.addEventListener('progress', function(event){
-	// 					var percent = 0;
-	// 					var position = event.loaded || event.position;
-	// 					var total = event.total;
-	// 					if (event.lengthComputable) {
-	// 						percent = Math.ceil(position / total * 100);
-	// 						progressbar.css("width", + percent +"%");
-	// 					}
-	// 			}, true);
-	// 		}
-	// 		return xhr;
-	// 	}
-    // }).done(function(response){
-    //     debugger;
-	// 	var url = $(response).find("Location").text(); //get file location
-	// 	var the_file_name = $(response).find("Key").text(); //get uploaded file name
-    //     $("#results").html("<span>File has been uploaded, Here's your file <a href=" + url + ">" + the_file_name + "</a></span>"); //response
-    // });
-}
 
 function loadXHR(url) {
 
@@ -177,16 +144,87 @@ function loadXHR(url) {
 
 };
 
-function toDataUrl(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-            callback(reader.result);
-        }
-        reader.readAsDataURL(xhr.response);
-    };
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
+function checkLogin(email,pass){
+    $.ajax({
+        contentType: 'application/json',
+        data: JSON.stringify({"user_email":email}),
+        dataType: 'json',
+        success: function(data){
+            debugger;
+            if(data.length == 0){
+                $(".email-not").removeClass('hide')
+            }else{
+                if(data[0][3] == pass ){
+                    localStorage.setItem("customer_id",data[0][1])
+                    window.location.href = "login.html";
+                }else{
+                    $(".pass-not").removeClass('hide')
+                }
+            }
+        },
+        error: function(){
+            debugger;
+            app.log("Device control failed");
+        },
+        processData: false,
+        type: 'POST',
+        url: 'http://localhost:8888/getUserLogin'
+    });
 }
+
+function getHistoryData(){
+    $.ajax({
+        contentType: 'application/json',
+        data: JSON.stringify({"cust_id":localStorage.getItem("customer_id")}),
+        dataType: 'json',
+        success: function(data){
+            debugger;
+            
+                const table = document.getElementById("historyTable");
+                data.forEach( item => {
+                  let row = table.insertRow();
+                  let date = row.insertCell(0);
+                  date.innerHTML = item.date;
+                  let name = row.insertCell(1);
+                  name.innerHTML = item.name;
+                });
+              
+        },
+        error: function(){
+            debugger;
+            app.log("Device control failed");
+        },
+        processData: false,
+        type: 'POST',
+        url: 'http://localhost:8888/getHistory'
+    })
+}
+
+
+
+// var s3 = new AWS.S3({
+//     accessKeyId: 'AKIAYYI7C6SJKZZZKZUO',
+//     secretAccessKey: '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'
+//   });
+  
+//   var uploadPreSignedUrl = s3.getSignedUrl('putObject', {
+//       Bucket: 'dcproject123456',
+//       Key: '482905.jpg',
+//       ACL: 'authenticated-read',
+//       // This must match with your ajax contentType parameter
+//       ContentType: 'binary/octet-stream'
+  
+//       /* then add all the rest of your parameters to AWS puttObect here */
+//   });
+  
+//   var downloadPreSignedUrl = s3.getSignedUrl('getObject', {
+//       Bucket: 'dcproject123456',
+//       Key: '482905.jpg',
+//       /* set a fixed type, or calculate your mime type from the file extension */
+//       ResponseContentType: 'image/jpeg'
+//       /* and all the rest of your parameters to AWS getObect here */
+//   });
+  
+//   // now you have both urls
+//   console.log( uploadPreSignedUrl, downloadPreSignedUrl ); 
+ 

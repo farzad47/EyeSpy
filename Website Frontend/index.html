@@ -66,7 +66,9 @@
           <label for="name"><b>Password</b></label>
           <input type="text" placeholder="Enter Password" name="loginPassword" required>
           <br> </br>
-          <button type="submit" class="btn loginBtnSubmit">Submit</button>
+          <h1 class="error hide email-not">email not found</h1>
+          <h1 class="error hide pass-not">password doesnt match</h1>
+          <button type="button" class="btn loginBtnSubmit">Submit</button>
           <button type="button" class="btn cancel">Close</button>
         </form>
       </div>
@@ -198,33 +200,10 @@
 
     </footer>
   </div>
-  <div class="DemoScreen hide">
-    Demo screen
-  </div>
-  <div></div>
-
-  <!-- <py-config>
-    packages = ["matplotlib", "pandas"]
-  </py-config>
-  <py-script src="../Facial Recognition/face_recognize.py"></py-script> -->
-
-  <!-- <py-config>
-    packages = [
-     "numpy",
-     "matplotlib"
-    ]
-  </py-config> -->
-
-  <py-script src="../Facial Recognition/face_recognize.py">
-  </py-script>
 
 
-  <!-- <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js" integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw="  crossorigin="anonymous"></script> -->
+  
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-
-  <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
-
   <script src="main.js"></script>
 </body>
 

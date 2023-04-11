@@ -57,9 +57,6 @@ for row in qResults:
 #Declaring classifier as haar cascade face detection
 haar = cv.CascadeClassifier('haar_face.xml')
 
-#Print list of authorized individuals
-print(authorized)
-
 #Image arrays of faces
 features = []
 #Array of labels to correlate each image with a person
@@ -67,8 +64,10 @@ labels = []
 
 def Scan():
 
+    #Each row of results corresponds to an authorized person
     for person in qResults:
 
+        #Create a local Authorized Individuals folder
         exists = os.path.exists("Authorized_Individuals")
         if not exists:
             os.makedirs("Authorized_Individuals")
@@ -77,19 +76,22 @@ def Scan():
         label = person[0]
         name = person[1]
 
+        #Create local folders for each authorized individual
         exists = os.path.exists("Authorized_Individuals\\\\" + name)
         if not exists:
             os.makedirs("Authorized_Individuals\\\\" + name)
 
+        #Get each image URL for a given person
         personalImages = person[5].split(",")
-        
-        print(personalImages)
 
+        #Iterate through each image URL
         for url in range(len(personalImages)):
 
+            #Use the end of the URL as the local path name
             imgPath = personalImages[url].split("/")[-1]
             localPath = "Authorized_Individuals\\\\" + name + "\\\\" + imgPath
 
+            #Retrieving the image from the database and storing it locally in its correct path
             exists = os.path.exists(localPath)
             if not exists:
                 urllib.request.urlretrieve(personalImages[url], localPath)

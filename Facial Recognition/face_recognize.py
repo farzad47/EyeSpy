@@ -6,7 +6,10 @@ from Final_Text_Alert_Generation import *
 import face_train
 from flask import Flask, render_template, render_template_string, Response
 
+#Run training prior to recognizing
 face_train.__name__
+
+#Instantiate Flask application
 app = Flask(__name__)
 
 #Make connection to the SQL Host
@@ -76,6 +79,7 @@ features = np.load('features.npy', allow_pickle=True)
 #Array of labels to correlate each image with a person
 labels = np.load('labels.npy', allow_pickle=True)
 
+#Instantiate a recognizer using OpenCV
 face_recognizer = cv.face.LBPHFaceRecognizer_create()
 face_recognizer.read('faces_trained.yml')
 
@@ -125,6 +129,8 @@ def video_feed():
                 mimetype='multipart/x-mixed-replace; boundary=frame')
 
 def LiveVideo():
+    print("Facial Recognition started ----------------------")
+    
     #Video Input Capture [0 corresponds to laptop webcam]
     cpt = cv.VideoCapture(0)
 
@@ -136,6 +142,7 @@ def LiveVideo():
         # Read each frame of the video
         isTrue, frame = cpt.read()
 
+        #Convert the frames to grayscale
         grayFrame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
         #Coordinates of face in the video
@@ -192,8 +199,7 @@ def LiveVideo():
     cpt.release()
     cv.destroyAllWindows()
 
-
-
+#Run the Flask application
 app.run()
 
 cv.waitKey(0)

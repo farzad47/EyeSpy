@@ -180,7 +180,7 @@ def LiveVideo():
                 cv.putText(grayFrame, authorization, (x,y-5), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
             #Display video with rectangles
-            cv2.imwrite('Screenshot.jpg', grayFrame)
+            cv.imwrite('Screenshot.jpg', grayFrame)
             yield (b'--frame\r\n'
                 b'Content-Type: image/jpeg\r\n\r\n' + open('Screenshot.jpg', 'rb').read() + b'\r\n')
 

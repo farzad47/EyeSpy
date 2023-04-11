@@ -3,6 +3,11 @@ import cv2 as cv
 import numpy as np
 import mysql.connector as sql
 from Final_Text_Alert_Generation import *
+import face_train
+from flask import Flask, render_template, render_template_string, Response
+
+face_train.__name__
+app = Flask(__name__)
 
 #Make connection to the SQL Host
 db = sql.connect(
@@ -74,33 +79,50 @@ labels = np.load('labels.npy', allow_pickle=True)
 face_recognizer = cv.face.LBPHFaceRecognizer_create()
 face_recognizer.read('faces_trained.yml')
 
-def TestAccuracy():
-    #Directory holding authorized individuals
-    dir_test = "Test_Accuracy"
-    for i in os.listdir(dir_test):
-        test_image_path = dir_test + '\\' + i
-        
-        print(test_image_path)
+@app.route('/')
+def index():
+    """Video streaming"""
+    #return render_template('index.html')
+    return render_template_string('''<html>
+<head>
+    <title>Video Streaming </title>
+</head>
+<body>
+    <div>
+        <h1>Image</h1>
+        <img id="img" src="{{ url_for('video_feed') }}">
+    </div>
+    <div>
+        <h1>Canvas</h1>
+        <canvas id="canvas" width="640px" height="480px"></canvas>
+    </div>
 
-        test_image = cv.imread(test_image_path)
+<script >
+    var ctx = document.getElementById("canvas").getContext('2d');
+    var img = new Image();
+    img.src = "{{ url_for('video_feed') }}";
 
-        grayTestImg = cv.cvtColor(test_image, cv.COLOR_BGR2GRAY)
+    // need only for static image
+    //img.onload = function(){   
+    //    ctx.drawImage(img, 0, 0);
+    //};
 
-        #Coordinates of face in the image
-        faces_rect = haar.detectMultiScale(grayTestImg, scaleFactor=1.1, minNeighbors=5)
+    // need only for animated image
+    function refreshCanvas(){
+        ctx.drawImage(img, 0, 0);
+    };
+    window.setInterval("refreshCanvas()", 50);
 
-        #Draw square locations where faces are found within the video
-        for (x,y,w,h) in faces_rect:
-            faces_region = grayTestImg[y:y+h,x:x+h]
-            cv.rectangle(grayTestImg, (x,y), (x+w,y+h), (0,255,0), thickness=2)
+</script>
 
-        label, confidence = face_recognizer.predict(faces_region)
-        print(f'Label = {authorized[label]} with a confidence of {confidence}')
+</body>
+</html>''')
 
-        cv.putText(grayTestImg, str(authorized[label]), (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
-
-        #Display image with rectangles
-        #cv.imshow(i, grayTestImg)
+@app.route('/video_feed')
+def video_feed():
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    return Response(LiveVideo(),
+                mimetype='multipart/x-mixed-replace; boundary=frame')
 
 def LiveVideo():
     #Video Input Capture [0 corresponds to laptop webcam]
@@ -158,7 +180,9 @@ def LiveVideo():
                 cv.putText(grayFrame, authorization, (x,y-5), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
             #Display video with rectangles
-            cv.imshow('Live-Feed', grayFrame)
+            cv2.imwrite('Screenshot.jpg', grayFrame)
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + open('Screenshot.jpg', 'rb').read() + b'\r\n')
 
         #Stop reading if 'D' key is pressed
         if cv.waitKey(20) & 0xFF==ord('d'):
@@ -168,7 +192,8 @@ def LiveVideo():
     cpt.release()
     cv.destroyAllWindows()
 
-#TestAccuracy()
-LiveVideo()
+
+
+app.run()
 
 cv.waitKey(0)

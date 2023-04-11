@@ -101,9 +101,22 @@
           <label for="phone"><b>Phone Number</b></label>
           <input type="tel" placeholder="Enter Phone Number" name="phone" required>
 
+          <label for="Address"><b>Address</b></label>
+          <input type="text" placeholder="Enter Address" name="Address" required>
+
+          <label for="carrier"><b>Carrier</b></label>
+          <select style='margin-left: 100px;' name="carrier" id="carrierId">
+            <option value="tmobile">tmobile</option>
+            <option value="at&t">AT & T</option>
+            <option value="lyca">lyca</option>
+          </select>
+          <br>
+          </br>
           <label for="photos"><b>Attach 5 Photos</b></label>
           <input type="file" name="photos[]" multiple accept="image/*">
-
+          
+          <h1 class="error hide some-other-error">some error occured and its not you. please try after some time</h1>
+          <h1 class="error hide email-exist">email already exist try to login</h1>
           <button type="button" class="btn-demoSubmit btn">Submit</button>
           <button type="button" class="btn cancel">Close</button>
         </form>
@@ -187,7 +200,7 @@
             <br> <span style="font-size:10px; color:#ddd;">click on the button below to test our service with your
               laptop camera</span>
           </div>
-          <div class="getDemoBtn">Get Demo</div>
+          <div class="getDemoBtn">Sign Up</div>
         </div>
         <img src="assets/securityCamera2.png">
 

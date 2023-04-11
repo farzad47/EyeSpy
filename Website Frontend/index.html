@@ -16,8 +16,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1352.0/aws-sdk.js" integrity="sha512-AuSqaqfUCKvrmPYYRJ9vQvF6ANEdXS7/PO8Uw57/RPb2kJ3xUyKr7ToePYxigSdXrhIQ8V39k8pQcjbHDZtRzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link href="style.css" rel="stylesheet" type="text/css" />
    <!-- linking to PyScript assets -->
-   <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-   <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+   <!-- <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+   <script defer src="https://pyscript.net/latest/pyscript.js"></script> -->
 
    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.min.js" integrity="sha512-nnNHpffPSgINrsR8ZAIgFUIMexORL5tPwsfktOTxVYSv+AUAILuFYWES8IHl+hhIhpFGlKvWFiz9ZEusrPcSBQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.js" integrity="sha512-UOPGGJGJDgYLHr0jkg4Ie9q0+ote8ofDM+vNdxw8sjPWV2/BnY6nY3zKy9N02HQX5QFk+QcHC1jcoDoSH2PgFw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -101,9 +101,22 @@
           <label for="phone"><b>Phone Number</b></label>
           <input type="tel" placeholder="Enter Phone Number" name="phone" required>
 
+          <label for="Address"><b>Address</b></label>
+          <input type="text" placeholder="Enter Address" name="Address" required>
+
+          <label for="carrier"><b>Carrier</b></label>
+          <select style='margin-left: 100px;' name="carrier" id="carrierId">
+            <option value="tmobile">tmobile</option>
+            <option value="at&t">AT & T</option>
+            <option value="lyca">lyca</option>
+          </select>
+          <br>
+          </br>
           <label for="photos"><b>Attach 5 Photos</b></label>
           <input type="file" name="photos[]" multiple accept="image/*">
-
+          
+          <h1 class="error hide some-other-error">some error occured and its not you. please try after some time</h1>
+          <h1 class="error hide email-exist">email already exist try to login</h1>
           <button type="button" class="btn-demoSubmit btn">Submit</button>
           <button type="button" class="btn cancel">Close</button>
         </form>
@@ -187,7 +200,7 @@
             <br> <span style="font-size:10px; color:#ddd;">click on the button below to test our service with your
               laptop camera</span>
           </div>
-          <div class="getDemoBtn">Get Demo</div>
+          <div class="getDemoBtn">Sign Up</div>
         </div>
         <img src="assets/securityCamera2.png">
 

@@ -31,9 +31,13 @@ body {
     position: absolute;
     top: 200px;
     left: 3%;
-
+    overflow-y:scroll;
+    height:270px;
+    display:block;
   }
-  
+  table::-webkit-scrollbar {
+    display: none;
+  }
   td, th {
     border: 1px solid #dddddd;
     text-align: left;
@@ -53,6 +57,10 @@ body {
     max-width: 500px;
     padding: 20px;
     background-color: #fff;
+    top: 100px;
+    height: 348px;
+    overflow: hidden;
+    overflow-y: scroll;
   }
   
   .form-login{

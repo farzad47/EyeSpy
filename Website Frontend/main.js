@@ -5,6 +5,9 @@ $(document).ready(function () {
     }, 800, function () {
         // if you need a callback function
     });
+    if(localStorage.getItem("customer_id") != null){
+        getHistoryData();
+    }
 })
 function clickEvents() {
     $(".lowHead ul li").on("click", function (e) {
@@ -155,7 +158,7 @@ function checkLogin(email,pass){
                 $(".email-not").removeClass('hide')
             }else{
                 if(data[0][3] == pass ){
-                    localStorage.setItem("customer_id",data[0][1])
+                    localStorage.setItem("customer_id",data[0][0])
                     window.location.href = "login.html";
                 }else{
                     $(".pass-not").removeClass('hide')
@@ -181,16 +184,18 @@ function getHistoryData(){
             debugger;
             
                 const table = document.getElementById("historyTable");
-                data.forEach( item => {
-                  let row = table.insertRow();
-                  let date = row.insertCell(0);
-                  date.innerHTML = item.date;
-                  let name = row.insertCell(1);
-                  name.innerHTML = item.name;
-                });
+               
+                headings = ["Sr No.", "Name", "Alert Sent","Date and Time","Access Type"]
+                for(var i=0; i < data.length ; i++){
+                    let row = table.insertRow();
+                    for(var j=0 ; j < headings.length ; j++){
+                       var temp =  row.insertCell(j);
+                       temp.innerHTML = data[i][j];
+                    }
+                }
               
         },
-        error: function(){
+        error: function(xhr){
             debugger;
             app.log("Device control failed");
         },

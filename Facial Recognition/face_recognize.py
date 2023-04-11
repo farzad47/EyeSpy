@@ -162,10 +162,11 @@ def LiveVideo():
             faces_region = grayFrame[y:y+h,x:x+h]
             cv.rectangle(grayFrame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
 
+        authorization = "Authorized"
+
         #Predict confidence for any face detected
         if(len(faces_rect) != 0):
             label, confidence = face_recognizer.predict(faces_region)
-            authorization = "Authorized"
 
             #Send alert if unauthorized individual is detected
             if(confidence > 100 and not emailSent):
@@ -189,7 +190,10 @@ def LiveVideo():
             else:
                 cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(label))
                 details = cursor.fetchall()
-                authorization = details[0][1]
+
+                #Potentially display person's name above their head
+                #authorization = details[0][1]
+                authorization = "Authorized"
                 
                 #Archive record of person detected
                 if queryInsert.count(details[0][0]) < 1:
@@ -201,10 +205,10 @@ def LiveVideo():
             for (x,y,w,h) in faces_rect:
                 cv.putText(grayFrame, authorization, (x,y-5), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
-            #Display video with rectangles
-            cv.imwrite('Screenshot.jpg', grayFrame)
-            yield (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + open('Screenshot.jpg', 'rb').read() + b'\r\n')
+        #Display video with rectangles
+        cv.imwrite('Screenshot.jpg', grayFrame)
+        yield (b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + open('Screenshot.jpg', 'rb').read() + b'\r\n')
 
         #Stop reading if 'D' key is pressed
         if cv.waitKey(20) & 0xFF==ord('d'):

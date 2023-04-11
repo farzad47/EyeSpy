@@ -5,6 +5,7 @@ import mysql.connector as sql
 from Final_Text_Alert_Generation import *
 import face_train
 from flask import Flask, render_template, render_template_string, Response
+from threading import Timer
 
 #Run training prior to recognizing
 face_train.__name__
@@ -25,6 +26,8 @@ cursor = db.cursor(buffered=True)
 
 #Specifying CameraID - This would be dynamic in real-world model
 cameraID = 1
+
+global emailSent
 
 #Execute a query to find the current camera ID
 cursor.execute("SELECT * FROM customer_cam_mapping WHERE CAM_ID LIKE " + str(cameraID))
@@ -128,8 +131,14 @@ def video_feed():
     return Response(LiveVideo(),
                 mimetype='multipart/x-mixed-replace; boundary=frame')
 
+def ResetAlert():
+    #Allow another alert to be generated
+    global emailSent
+    emailSent = False
+
 def LiveVideo():
     print("Facial Recognition started ----------------------")
+    global emailSent
     
     #Video Input Capture [0 corresponds to laptop webcam]
     cpt = cv.VideoCapture(0)
@@ -137,7 +146,7 @@ def LiveVideo():
     #Variables for alerts
     queryInsert = []
     emailSent = False
-
+    
     while True:
         # Read each frame of the video
         isTrue, frame = cpt.read()
@@ -161,8 +170,14 @@ def LiveVideo():
             #Send alert if unauthorized individual is detected
             if(confidence > 100 and not emailSent):
                 authorization = "Unauthorized"
+                
+                #Send an alert to the customer
                 sendEmail(customerPhone, customerCarrier, customerEmail)
                 emailSent = True
+
+                #Start the timer to reset the alert generation (30 seconds)
+                reset = Timer(30.0, ResetAlert)
+                reset.start()
                 
                 #Archive record of person detected
                 if queryInsert.count(details[0][0]) < 1:
@@ -200,6 +215,6 @@ def LiveVideo():
     cv.destroyAllWindows()
 
 #Run the Flask application
-app.run()
+app.run("localhost", 7777)
 
 cv.waitKey(0)

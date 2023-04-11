@@ -14,6 +14,7 @@ EMAIL = "spidermanofspider@gmail.com"
 PASSWORD = "ixuqbmljbxgvzcig"
 
 def sendEmail(phoneNumber, carrier, email):
+    
     smtp_server = "smtp.gmail.com"
     port = 587  # For starttls
     sender_email = EMAIL # TODO: replace with your email address

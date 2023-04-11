@@ -77,25 +77,16 @@ function clickEvents() {
     })
     $('.btn-demoSubmit').on("click", function (event) {
         event.preventDefault();
-        $(".DemoScreen").removeClass('hide')
-        var theFormFile = $('#theFile').get()[0].files[0];
-  $.ajax({
-    type: 'PUT',
-    url: uploadPreSignedUrl,
-    // Content type must much with the parameter you signed your URL with
-    contentType: 'binary/octet-stream',
-    // this flag is important, if not set, it will try to send data as a form
-    processData: false,
-    // the actual file is sent raw
-    data: theFormFile
-  })
-  .success(function() {
-    alert('File uploaded');
-  })
-  .error(function() {
-    alert('File NOT uploaded');
-    console.log( arguments);
-  });
+        $(".DemoScreen").removeClass('hide');
+        // var theFormFile = $('#theFile').get()[0].files[0];
+        var nameTemp = $("input[name='name']").val()
+       var email= $("input[name='email']").val()
+  var phone= $("input[name='phone']").val()
+  var photos= "configAWS"
+  var carrier= $("select[name='carrier']").val()
+  var address = $("input[name='Address']").val()
+  $(".error").addClass('hide')
+        submitDemoDetails(nameTemp,email,phone,photos,carrier,address)
     })
 
     function goPython(){
@@ -139,7 +130,6 @@ function loadXHR(url) {
     method: 'POST',
     body: formData
   });
- debugger;
 
 
    
@@ -153,7 +143,6 @@ function checkLogin(email,pass){
         data: JSON.stringify({"user_email":email}),
         dataType: 'json',
         success: function(data){
-            debugger;
             if(data.length == 0){
                 $(".email-not").removeClass('hide')
             }else{
@@ -166,7 +155,6 @@ function checkLogin(email,pass){
             }
         },
         error: function(){
-            debugger;
             app.log("Device control failed");
         },
         processData: false,
@@ -181,8 +169,6 @@ function getHistoryData(){
         data: JSON.stringify({"cust_id":localStorage.getItem("customer_id")}),
         dataType: 'json',
         success: function(data){
-            debugger;
-            
                 const table = document.getElementById("historyTable");
                
                 headings = ["Sr No.", "Name", "Alert Sent","Date and Time","Access Type"]
@@ -196,7 +182,6 @@ function getHistoryData(){
               
         },
         error: function(xhr){
-            debugger;
             app.log("Device control failed");
         },
         processData: false,
@@ -205,31 +190,72 @@ function getHistoryData(){
     })
 }
 
+function submitDemoDetails(name,email,phone,photo,carrier,address){
+    $.ajax({
+        contentType: 'application/json',
+        data: JSON.stringify({"user_name":name,"email_id": email ,"phone_no":phone,"photos_link":photo,"carrier":carrier,"address":address}),
+        dataType: 'json',
+        success: function(data){
+            window.location.href = "login.html";
+           
+        },
+        error: function(xhr){
+
+            if(xhr.readyState == 4){
+                $(".email-exist").removeClass("hide")
+            }else{
+                $(".some-other-error").removeClass("hide")
+            }
+        },
+        processData: false,
+        type: 'POST',
+        url: 'http://localhost:8888/submitDemoDetails'
+    });
+
+    // $.ajax({
+    //     type: 'PUT',
+    //     url: uploadPreSignedUrl,
+    //     // Content type must much with the parameter you signed your URL with
+    //     contentType: 'binary/octet-stream',
+    //     // this flag is important, if not set, it will try to send data as a form
+    //     processData: false,
+    //     // the actual file is sent raw
+    //     data: theFormFile
+    //   })
+    //   .success(function() {
+    //     alert('File uploaded');
+    //   })
+    //   .error(function() {
+    //     alert('File NOT uploaded');
+    //     console.log( arguments);
+    //   });
+}
 
 
-// var s3 = new AWS.S3({
-//     accessKeyId: 'AKIAYYI7C6SJKZZZKZUO',
-//     secretAccessKey: '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'
-//   });
+
+var s3 = new AWS.S3({
+    accessKeyId: 'AKIAYYI7C6SJKZZZKZUO',
+    secretAccessKey: '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'
+  });
   
-//   var uploadPreSignedUrl = s3.getSignedUrl('putObject', {
-//       Bucket: 'dcproject123456',
-//       Key: '482905.jpg',
-//       ACL: 'authenticated-read',
-//       // This must match with your ajax contentType parameter
-//       ContentType: 'binary/octet-stream'
+  var uploadPreSignedUrl = s3.getSignedUrl('putObject', {
+      Bucket: 'dcproject123456',
+      Key: '482905.jpg',
+      ACL: 'authenticated-read',
+      // This must match with your ajax contentType parameter
+      ContentType: 'binary/octet-stream'
   
-//       /* then add all the rest of your parameters to AWS puttObect here */
-//   });
+      /* then add all the rest of your parameters to AWS puttObect here */
+  });
   
-//   var downloadPreSignedUrl = s3.getSignedUrl('getObject', {
-//       Bucket: 'dcproject123456',
-//       Key: '482905.jpg',
-//       /* set a fixed type, or calculate your mime type from the file extension */
-//       ResponseContentType: 'image/jpeg'
-//       /* and all the rest of your parameters to AWS getObect here */
-//   });
+  var downloadPreSignedUrl = s3.getSignedUrl('getObject', {
+      Bucket: 'dcproject123456',
+      Key: '482905.jpg',
+      /* set a fixed type, or calculate your mime type from the file extension */
+      ResponseContentType: 'image/jpeg'
+      /* and all the rest of your parameters to AWS getObect here */
+  });
   
-//   // now you have both urls
-//   console.log( uploadPreSignedUrl, downloadPreSignedUrl ); 
+  // now you have both urls
+  console.log( uploadPreSignedUrl, downloadPreSignedUrl ); 
  

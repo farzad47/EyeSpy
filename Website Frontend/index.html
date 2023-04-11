@@ -1,230 +1,210 @@
-$(document).ready(function () {
-    clickEvents();
-    $('html, body').animate({
-        scrollTop: $('body').offset().top - 70
-    }, 800, function () {
-        // if you need a callback function
-    });
-})
-function clickEvents() {
-    $(".lowHead ul li").on("click", function (e) {
-        if (!$(this).hasClass('pageSelected')) {
-            $('.pageSelected').removeClass('pageSelected')
-            $(this).addClass('pageSelected')
-        }
-        if ($(this).hasClass('Home')) {
-            $('html, body').animate({
-                scrollTop: $('body').offset().top - 70
-            }, 800, function () {
-                // if you need a callback function
-            });
-        }
-        else if ($(this).hasClass('About')) {
-            $('html, body').animate({
-                scrollTop: $('body').offset().top = 390
-            }, 800, function () {
-                // if you need a callback function
-            });
-        }
-        else if ($(this).hasClass('Services')) {
-            $('html, body').animate({
-                scrollTop: $('body').offset().top = 630
-            }, 800, function () {
-                // if you need a callback function
-            });
-        }
-        else if ($(this).hasClass('Demo')) {
-            $('html, body').animate({
-                scrollTop: $('body').offset().top = 950
-            }, 800, function () {
-                // if you need a callback function
-            });
-        }
-    });
-    $(".loginBtnSubmit").on("click", function (e) {
-        email = $('input[name="loginEmail"]').val()
-        pass = $('input[name="loginPassword"]').val()
-        if (email != '' & pass != '') {
-            $(".error").addClass('hide')
-            checkLogin(email,pass)
-            
-        }
-        
-    })
-    $('.getDemoBtn').on("click", function () {
-        $(".form-demo")[0].style.display = "block";
-    })
-    $('.getAppointBtn').on("click", function () {
-        $(".form-appointment")[0].style.display = "block";
-    })
-    $('.btn-login').on("click", function () {
-        $(".form-login")[0].style.display = "block";
-    })
-    $('.getDemoBtn').on("click", function () {
-        $(".form-demo")[0].style.display = "block";
-    })
-    $('.btn-logout').on("click", function () {
-        localStorage.clear()
-        location.href = "index.html";
-    })
-    $('.cancel').on('click', function () {
-        $(".form-demo")[0].style.display = "none";
-        $(".form-appointment")[0].style.display = "none";
-        $(".form-login")[0].style.display = "none";
-    })
-    $('.btn-demoSubmit').on("click", function (event) {
-        event.preventDefault();
-        $(".DemoScreen").removeClass('hide')
-        var theFormFile = $('#theFile').get()[0].files[0];
-  $.ajax({
-    type: 'PUT',
-    url: uploadPreSignedUrl,
-    // Content type must much with the parameter you signed your URL with
-    contentType: 'binary/octet-stream',
-    // this flag is important, if not set, it will try to send data as a form
-    processData: false,
-    // the actual file is sent raw
-    data: theFormFile
-  })
-  .success(function() {
-    alert('File uploaded');
-  })
-  .error(function() {
-    alert('File NOT uploaded');
-    console.log( arguments);
-  });
-    })
+<!doctype html>
+<html lang="en">
 
-    function goPython(){
-        uploadtoS3().then(function(resp){
-            console.log(resp)
-            // window.location.href="http://127.0.0.1:5000/"
-        });
-       
-    }
+<head>
 
-    
+  <title>EyeSpy</title>
+  <link href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+  <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1352.0/aws-sdk.min.js" integrity="sha512-TZm51eaqRhqGFXBcVZIqm/vP3a/pH5PKB6q9hSUN1TZ1tMmhe+QbSuxMs02iJmlGjak9EO/j0L4D2hBm5PgYpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1352.0/aws-sdk.js" integrity="sha512-AuSqaqfUCKvrmPYYRJ9vQvF6ANEdXS7/PO8Uw57/RPb2kJ3xUyKr7ToePYxigSdXrhIQ8V39k8pQcjbHDZtRzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+   <!-- linking to PyScript assets -->
+   <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+   <script defer src="https://pyscript.net/latest/pyscript.js"></script>
 
-    // console.log(uploadedImage.Location)
-}
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.min.js" integrity="sha512-nnNHpffPSgINrsR8ZAIgFUIMexORL5tPwsfktOTxVYSv+AUAILuFYWES8IHl+hhIhpFGlKvWFiz9ZEusrPcSBQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.js" integrity="sha512-UOPGGJGJDgYLHr0jkg4Ie9q0+ote8ofDM+vNdxw8sjPWV2/BnY6nY3zKy9N02HQX5QFk+QcHC1jcoDoSH2PgFw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
 
 
+<body>
+  <div class="pt-page-1">
+    <header>
+      <nav class="topnav">
+        <div class="topHead">
+          <div> <i class="fa-solid fa-envelope"></i>
+            eyespycustomercare6@gmail.com</div>
+          <div><i class="fa-solid fa-phone"></i>
+            +1 (614) 905 4285</div>
+        </div>
+        <div class="lowHead">
+          <ul>
+            <li class="pageSelected Home">Home</li>
+            <li class="About">About</li>
+            <li class="Services">Services</li>
+            <li class="Demo">Demo</li>
+          </ul>
 
-function loadXHR(url) {
+          <div class="btn-login">
+            Login
+          </div>
+        </div>
+        <div class="ourLogo">
+          <img src="assets/logo.png">
+          <div>
+            EYESPY
+          </div>
+        </div>
 
-    // var fs = require('fs'); 
-    // var imagedata = $('input')[7].files[0] // get imagedata from POST request 
-    // //find path to store
-    // // fs.writeFile("../Auth_Individuals/NewAnu", imagedata, 'binary', function(err) { 
-    // //     console.log("The file was saved!"); 
-     
-    // // });  
-    
-    // writeFile( "../Auth_Individuals/NewAnu", null, imagedata )
-    const fileInput = $('input')[7] ;
+      </nav>
+    </header>
 
+    <main class="home-page">
+      <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+      <div class="form-popup form-login" id="loginForm">
+        <form method="post" class="form-container" >
+          <label for="email"><b>Email</b></label>
+          <input type="email" placeholder="Enter Email" name="loginEmail" required>
 
-  const file = fileInput.files[0];
-  const imageData = file.arrayBuffer();
+          <label for="name"><b>Password</b></label>
+          <input type="text" placeholder="Enter Password" name="loginPassword" required>
+          <br> </br>
+          <h1 class="error hide email-not">email not found</h1>
+          <h1 class="error hide pass-not">password doesnt match</h1>
+          <button type="button" class="btn loginBtnSubmit">Submit</button>
+          <button type="button" class="btn cancel">Close</button>
+        </form>
+      </div>
 
-//   const imageUrl = uploadImage(imageData);
-  const url12 = 'https://example.com/upload';
-  const formData = new FormData();
-  formData.append('image', imageData);
+      <div class="form-popup form-appointment" id="appointmentForm">
+        <form method="post" class="form-container" >
+          <label style="font-size:16px"><b>Kindly fill your contact details</b></label>
+        </br>
+      </br>
+          <label for="email"><b>Email</b></label>
+          <input type="email" placeholder="Enter Email" name="loginEmail" required>
 
-  const response = fetch(url12, {
-    method: 'POST',
-    body: formData
-  });
- debugger;
+          <label for="phoneNo"><b>phone Number</b></label>
+          <input type="text" placeholder="Enter mobile number" name="phoneNum" required>
+          <br> </br>
+          <button type="submit" class="btn loginBtnSubmit">Submit</button>
+          <button type="button" class="btn cancel">Close</button>
+        </form>
+      </div>
 
+      <div class="form-popup form-demo" id="myForm">
+        <form method="post" class="form-container">
+          <h2>Get Demo Form</h2>
+          <label for="name"><b>Name</b></label>
+          <input type="text" placeholder="Enter Name" name="name" required>
 
-   
+          <label for="email"><b>Email</b></label>
+          <input type="email" placeholder="Enter Email" name="email" required>
 
+          <label for="phone"><b>Phone Number</b></label>
+          <input type="tel" placeholder="Enter Phone Number" name="phone" required>
 
-};
+          <label for="photos"><b>Attach 5 Photos</b></label>
+          <input type="file" name="photos[]" multiple accept="image/*">
 
-function checkLogin(email,pass){
-    $.ajax({
-        contentType: 'application/json',
-        data: JSON.stringify({"user_email":email}),
-        dataType: 'json',
-        success: function(data){
-            debugger;
-            if(data.length == 0){
-                $(".email-not").removeClass('hide')
-            }else{
-                if(data[0][3] == pass ){
-                    localStorage.setItem("customer_id",data[0][1])
-                    window.location.href = "login.html";
-                }else{
-                    $(".pass-not").removeClass('hide')
-                }
-            }
-        },
-        error: function(){
-            debugger;
-            app.log("Device control failed");
-        },
-        processData: false,
-        type: 'POST',
-        url: 'http://localhost:8888/getUserLogin'
-    });
-}
-
-function getHistoryData(){
-    $.ajax({
-        contentType: 'application/json',
-        data: JSON.stringify({"cust_id":localStorage.getItem("customer_id")}),
-        dataType: 'json',
-        success: function(data){
-            debugger;
-            
-                const table = document.getElementById("historyTable");
-                data.forEach( item => {
-                  let row = table.insertRow();
-                  let date = row.insertCell(0);
-                  date.innerHTML = item.date;
-                  let name = row.insertCell(1);
-                  name.innerHTML = item.name;
-                });
-              
-        },
-        error: function(){
-            debugger;
-            app.log("Device control failed");
-        },
-        processData: false,
-        type: 'POST',
-        url: 'http://localhost:8888/getHistory'
-    })
-}
+          <button type="button" class="btn-demoSubmit btn">Submit</button>
+          <button type="button" class="btn cancel">Close</button>
+        </form>
+      </div>
 
 
+      <div class="hero">
+        <div class="heroTxt">
+          <div class="bigFont"> Keep <b>Safe &</b>
+            <br><b>Happy</b> Your Mind
+          </div>
+          <div class="getAppointBtn">Get Appointment</div>
+        </div>
+        <img src="assets/securityCamera.png">
+      </div>
 
-// var s3 = new AWS.S3({
-//     accessKeyId: 'AKIAYYI7C6SJKZZZKZUO',
-//     secretAccessKey: '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'
-//   });
+      <div class="ourOfferings">
+        <div>
+          <h2 class="hr-lines">offers</h2>
+          <span style="font-size: 18px; font-weight: 600;">Our Best Offers</span>
+        </div>
+        <div class="offeringsList">
+          <div>
+            <div> <i class="fa-solid fa-home"></i></div>
+            <div class="bold offersTitle">Home <br>Security</div>
+            <div>We Alert homeowners when an unauthorized person enters their home. </div>
+
+          </div>
+          <div>
+            <div> <i class="fa-solid fa-shield-halved"></i></div>
+            <div class="bold offersTitle">Information <br>Security</div>
+            <div>All the information collected is secured and can be accessed by authorized personal only</div>
+
+          </div>
+          <div>
+            <div><i class="fa-solid fa-message"></i></div>
+            <div class="bold offersTitle">Real-Time <br>Alerts</div>
+            <div>We provide real-time alerts to homeowners, allowing them to take immediate action to protect their
+              homes
+              and their families. </div>
+
+          </div>
+          <div>
+            <div> <i class="fa-solid fa-headset"></i></div>
+            <div class="bold offersTitle">Useful <br>Support</div>
+            <div>Our customers can get help and find answers to questions as soon as they come up come up 24/7 and in
+              real-time</div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="workingProcess">
+        <div class="topic">
+          <h2 class="hr-lines">process</h2>
+          <span style="font-size: 18px; font-weight: 600;margin-left: -60px;">Working Process</span>
+        </div>
+        <div class="processDivs">
+          <div>
+            <div class='num'>01</div>
+            <div>You Order</div>
+            <div>If you dont have already installed security system, you order the system</div>
+          </div>
+          <div>
+            <div class='num'>02</div>
+            <div>Installation</div>
+            <div>We install the security cams with our service. </div>
+          </div>
+          <div>
+            <div class='num'>03</div>
+            <div>Enjoy Your Safety</div>
+            <div>You get alerts when any unauthorized person enters your house </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="getDemo">
+        <div class="demoTxt">
+          <div>
+            <span style="font-size: 18px; font-weight: 600;">Looking for a demo of our service?</span>
+            <br> <span style="font-size:10px; color:#ddd;">click on the button below to test our service with your
+              laptop camera</span>
+          </div>
+          <div class="getDemoBtn">Get Demo</div>
+        </div>
+        <img src="assets/securityCamera2.png">
+
+      </div>
+
+    </main>
+
+    <footer>
+
+
+    </footer>
+  </div>
+
+
   
-//   var uploadPreSignedUrl = s3.getSignedUrl('putObject', {
-//       Bucket: 'dcproject123456',
-//       Key: '482905.jpg',
-//       ACL: 'authenticated-read',
-//       // This must match with your ajax contentType parameter
-//       ContentType: 'binary/octet-stream'
-  
-//       /* then add all the rest of your parameters to AWS puttObect here */
-//   });
-  
-//   var downloadPreSignedUrl = s3.getSignedUrl('getObject', {
-//       Bucket: 'dcproject123456',
-//       Key: '482905.jpg',
-//       /* set a fixed type, or calculate your mime type from the file extension */
-//       ResponseContentType: 'image/jpeg'
-//       /* and all the rest of your parameters to AWS getObect here */
-//   });
-  
-//   // now you have both urls
-//   console.log( uploadPreSignedUrl, downloadPreSignedUrl ); 
- 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="main.js"></script>
+</body>
+
+</html>

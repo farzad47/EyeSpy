@@ -4,6 +4,7 @@ import numpy as np
 import urllib
 import mysql.connector as sql
 from Final_Text_Alert_Generation import *
+import socket
 
 #Make connection to the SQL Host
 db = sql.connect(
@@ -16,11 +17,13 @@ db = sql.connect(
 #Object that allows us to write SQL statements for database
 cursor = db.cursor(buffered=True)
 
-#Specifying CameraID - This would be dynamic in real-world model
-cameraID = 1
+## getting the hostname by socket.gethostname() method
+hostname = socket.gethostname()
+## getting the IP address using socket.gethostbyname() method
+cameraID = socket.gethostbyname(hostname)
 
 #Execute a query to find the current camera ID
-cursor.execute("SELECT * FROM customer_cam_mapping WHERE CAM_ID LIKE " + str(cameraID))
+cursor.execute("SELECT * FROM customer_cam_mapping WHERE CAM_IP LIKE (%s)", [cameraID])
 qResults = cursor.fetchall()
 
 customerID = qResults[0][0]

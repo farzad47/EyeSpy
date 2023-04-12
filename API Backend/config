@@ -1,0 +1,5 @@
+Host EyeSpy 
+	HostName ec2-3-141-164-216.us-east-2.compute.amazonaws.com
+	User ubuntu
+	IdentitiesOnly yes
+	identityFile ‪C:\Users\farza\.ssh\EyeSpyTest.pem

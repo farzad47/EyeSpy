@@ -125,7 +125,8 @@ def LiveVideo():
         if cv.waitKey(20) & 0xFF==ord('d'):
             break
 
-        Stop reading if no face is detected
+       
+       # Stop reading if no face is detected
         if(len(faces_rect) == 0):
             break
 

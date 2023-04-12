@@ -180,6 +180,9 @@ def LiveVideo():
                 reset = Timer(30.0, ResetAlert)
                 reset.start()
                 
+                cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(label))
+                details = cursor.fetchall()
+
                 #Archive record of person detected
                 if queryInsert.count(details[0][0]) < 1:
                     cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('UNKNOWN','Yes',"+ str(customerID) +",'UNAUTHORIZED','0')")
@@ -211,6 +214,6 @@ def LiveVideo():
     cv.destroyAllWindows()
 
 #Run the Flask application
-#app.run("localhost", 7777)
+app.run("localhost", 7777)
 
 cv.waitKey(0)

@@ -80,9 +80,14 @@ def sub():
   photos= data['photos_link']
   carrier=data['carrier']
   address = data['address']
+  passwordLogin = data['password_login']
   mycursor.execute("Insert into person_detail(PERSON_NAME,EMAIL_ID,PHONE_NUMBER,ADDRESS,PHOTOS,carrier_detail) values('"+ name +"','"+ email +"','"+ phone +"','"+ address +"','" + photos + "','"+ carrier +"');")
   mydb.commit()
+  mycursor.execute("SELECT * FROM sys.person_detail where EMAIL_ID = '"+ email +"';")
   results = mycursor.fetchall()
+  cust_id = results[0][0]
+  mycursor.execute("Insert into login_details(USERNAME, EMAIL, PASSWORD, customer_id) values('"+ name +"','"+ email +"','"+ passwordLogin +"','"+ str(cust_id) +"');")
+  mydb.commit()
   return results
 # Close the connection
   mydb.close()

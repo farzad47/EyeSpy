@@ -152,7 +152,7 @@ function checkLogin(email,pass){
         },
         processData: false,
         type: 'POST',
-        url: 'http://localhost:8888/getUserLogin'
+        url: 'https://rainbow-churros-7145c9.netlify.app/website%20frontend/getUserLogin'
     });
 }
 

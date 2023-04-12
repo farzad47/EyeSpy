@@ -53,7 +53,7 @@ def us():
 
 # # Execute a simple query to test the connection
  custId = data['cust_id']
- mycursor.execute("SELECT srNo, personName, AlertSent, created_date_Time, method_of_Alert, authorized_status FROM sys.history_all WHERE cust_id = '"+ custId +"';")
+ mycursor.execute("SELECT srNo, personName, AlertSent, created_date_Time, authorized_status FROM sys.history_all WHERE cust_id = '"+ custId +"';")
 
  results = mycursor.fetchall()
  return results
@@ -80,12 +80,19 @@ def sub():
   photos= data['photos_link']
   carrier=data['carrier']
   address = data['address']
-  mycursor.execute("Insert into person_detail(PERSON_NAME,EMAIL_ID,PHONE_NUMBER,ADDRESS,carrier_detail) values('"+ name +"','"+ email +"','"+ phone +"','"+ address +"','"+ carrier +"');")
+  mycursor.execute("Insert into person_detail(PERSON_NAME,EMAIL_ID,PHONE_NUMBER,ADDRESS,PHOTOS,carrier_detail) values('"+ name +"','"+ email +"','"+ phone +"','"+ address +"','" + photos + "','"+ carrier +"');")
   mydb.commit()
-  results = mycursor.rowcount
+  results = mycursor.fetchall()
   return results
 # Close the connection
   mydb.close()
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run("localhost", 8888)

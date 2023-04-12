@@ -12,3 +12,18 @@ starlette==0.26.1
 typing_extensions==4.5.0
 uvicorn==0.21.1
 win32-setctime==1.1.0
+fastapi
+uvicorn
+
+#for template
+jinja2
+
+#for static files
+aiofiles
+
+#for database   #new
+sqlalchemy         
+psycopg2
+
+#for loading environment variables  #new
+python-dotenv

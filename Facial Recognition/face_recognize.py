@@ -1,10 +1,18 @@
 import os
 import cv2 as cv
 import numpy as np
-from PIL import Image
-import requests
-from io import BytesIO
 import mysql.connector as sql
+from Final_Text_Alert_Generation import *
+import face_train
+from flask import Flask, render_template, render_template_string, Response
+from threading import Timer
+import socket
+
+#Run training prior to recognizing
+face_train.__name__
+
+#Instantiate Flask application
+app = Flask(__name__)
 
 #Make connection to the SQL Host
 db = sql.connect(
@@ -17,88 +25,136 @@ db = sql.connect(
 #Object that allows us to write SQL statements for database
 cursor = db.cursor(buffered=True)
 
-#Execute a query for everything in the person_detail database/(table?)
-cursor.execute("SELECT * FROM person_detail")
+## getting the hostname by socket.gethostname() method
+hostname = socket.gethostname()
+## getting the IP address using socket.gethostbyname() method
+cameraID = socket.gethostbyname(hostname)
 
-#Store restults of the query so we can parse through them
+global emailSent
+
+#Execute a query to find the current camera ID
+cursor.execute("SELECT * FROM customer_cam_mapping WHERE CAM_IP LIKE (%s)", [cameraID])
+qResults = cursor.fetchall()
+
+customerID = qResults[0][0]
+
+#Execute a query to find the owner of the camera
+cursor.execute("SELECT * FROM authorized_customer_mapping WHERE CUSTOMER_ID LIKE " +  str(customerID))
+qResults = cursor.fetchall()
+
+#List of authorized individuals
+authorized = []
+authorizedID = []
+
+#Creating list of authorized ID's
+for row in qResults:
+    authorizedID.append(row[2])
+
+#Get the details for the customer (account owner)
+cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(customerID))
+customerResult = cursor.fetchall()
+
+#Retrieving customer information for alert generation
+customerPhone = customerResult[0][3]
+customerEmail = customerResult[0][2]
+customerCarrier = customerResult[0][6]
+
+#Start of next query
+detailQuery = "SELECT * FROM person_detail WHERE "
+
+#Include only each authorized ID in this query
+for i in range(len(authorizedID)):
+    detailQuery += ("PERSON_ID LIKE " + str(authorizedID[i]))
+    if i < len(authorizedID) - 1:
+        detailQuery += " OR "
+
+#Execute query to find each authorized individual for the given camera/address
+cursor.execute(detailQuery)
 qResults = cursor.fetchall()
 
 #Print the results in console
 for row in qResults:
-    print(row)
+    authorized.append(row[1])
 
-#List of authorized individuals
-authorized = []
 
 #Declaring classifier as haar cascade face detection
 haar = cv.CascadeClassifier('haar_face.xml')
-
-#Directory holding authorized individuals
-dir_auth = "Auth_Individuals"
-
-#Get List of authorized individuals (as their directories)
-awsImages = ["http://dcproject123456.s3-website.us-east-2.amazonaws.com/imageUpload/WIN_20230405_16_35_06_Pro.jpg",
-            "http://dcproject123456.s3-website.us-east-2.amazonaws.com/imageUpload/WIN_20230405_16_35_08_Pro.jpg"]
-awsName = "Anusha"
-
-if not os.path.exists(os.path.join(dir_auth,awsName)):
-   os.makedirs(os.path.join(dir_auth,awsName))
-
-for url in awsImages:
-    response = requests.get(url)
-    responseImg = Image.open(BytesIO(response.content))
-
-for i in os.listdir(dir_auth):
-    authorized.append(i)
-#Print list of authorized individuals
-print(authorized)
 
 #Image arrays of faces
 features = np.load('features.npy', allow_pickle=True)
 #Array of labels to correlate each image with a person
 labels = np.load('labels.npy', allow_pickle=True)
 
+#Instantiate a recognizer using OpenCV
 face_recognizer = cv.face.LBPHFaceRecognizer_create()
 face_recognizer.read('faces_trained.yml')
 
-def TestAccuracy():
-    #Directory holding authorized individuals
-    dir_test = "Test_Accuracy"
-    for i in os.listdir(dir_test):
-        test_image_path = dir_test + '\\' + i
-        
-        print(test_image_path)
+@app.route('/')
+def index():
+    """Video streaming"""
+    #return render_template('index.html')
+    return render_template_string('''<html>
+<head>
+    <title>Video Streaming </title>
+</head>
+<body>
+    <div>
+        <h1>Image</h1>
+        <img id="img" src="{{ url_for('video_feed') }}">
+    </div>
+    <div>
+        <h1>Canvas</h1>
+        <canvas id="canvas" width="640px" height="480px"></canvas>
+    </div>
 
-        test_image = cv.imread(test_image_path)
+<script >
+    var ctx = document.getElementById("canvas").getContext('2d');
+    var img = new Image();
+    img.src = "{{ url_for('video_feed') }}";
 
-        grayTestImg = cv.cvtColor(test_image, cv.COLOR_BGR2GRAY)
+    // need only for static image
+    //img.onload = function(){   
+    //    ctx.drawImage(img, 0, 0);
+    //};
 
-        #Coordinates of face in the image
-        faces_rect = haar.detectMultiScale(grayTestImg, scaleFactor=1.1, minNeighbors=5)
+    // need only for animated image
+    function refreshCanvas(){
+        ctx.drawImage(img, 0, 0);
+    };
+    window.setInterval("refreshCanvas()", 50);
 
-        #Draw square locations where faces are found within the video
-        for (x,y,w,h) in faces_rect:
-            faces_region = grayTestImg[y:y+h,x:x+h]
-            cv.rectangle(grayTestImg, (x,y), (x+w,y+h), (0,255,0), thickness=2)
+</script>
 
-        label, confidence = face_recognizer.predict(faces_region)
-        print(f'Label = {authorized[label]} with a confidence of {confidence}')
+</body>
+</html>''')
 
-        cv.putText(grayTestImg, str(authorized[label]), (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
+@app.route('/video_feed')
+def video_feed():
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    return Response(LiveVideo(),
+                mimetype='multipart/x-mixed-replace; boundary=frame')
 
-        #Display image with rectangles
-        #cv.imshow(i, grayTestImg)
+def ResetAlert():
+    #Allow another alert to be generated
+    global emailSent
+    emailSent = False
 
 def LiveVideo():
+    print("Facial Recognition started ----------------------")
+    global emailSent
+    
     #Video Input Capture [0 corresponds to laptop webcam]
     cpt = cv.VideoCapture(0)
 
-    authorization = "Authorized"
-
+    #Variables for alerts
+    queryInsert = []
+    emailSent = False
+    
     while True:
         # Read each frame of the video
         isTrue, frame = cpt.read()
 
+        #Convert the frames to grayscale
         grayFrame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
         #Coordinates of face in the video
@@ -109,32 +165,63 @@ def LiveVideo():
             faces_region = grayFrame[y:y+h,x:x+h]
             cv.rectangle(grayFrame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
 
+        authorization = "Authorized"
+
+        #Predict confidence for any face detected
         if(len(faces_rect) != 0):
             label, confidence = face_recognizer.predict(faces_region)
-            #print(f'Label = {authorized[label]} with a confidence of {confidence}')
 
-            if(confidence > 100):
+            #Send alert if unauthorized individual is detected
+            if(confidence > 100 and not emailSent):
                 authorization = "Unauthorized"
+                
+                #Send an alert to the customer
+                sendEmail(customerPhone, customerCarrier, customerEmail)
+                emailSent = True
 
-            cv.putText(grayFrame, authorization, (20,20), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
+                #Start the timer to reset the alert generation (30 seconds)
+                reset = Timer(30.0, ResetAlert)
+                reset.start()
+                
+                #Archive record of person detected
+                if queryInsert.count(details[0][0]) < 1:
+                    cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('UNKNOWN','Yes',"+ str(customerID) +",'UNAUTHORIZED','0')")
+                    db.commit()
+                    queryInsert.append(0)
 
-            #Display video with rectangles
-            cv.imshow('Video', grayFrame)
+            #Determine the name of the authorized individual
+            else:
+                cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(label))
+                details = cursor.fetchall()
+
+                #Potentially display person's name above their head
+                #authorization = details[0][1]
+                authorization = "Authorized"
+                
+                #Archive record of person detected
+                if queryInsert.count(details[0][0]) < 1:
+                    cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('"+ str(details[0][1]) +"','No','"+ str(customerID) +"','AUTHORIZED','"+ str(details[0][0]) +"')")
+                    db.commit()
+                    queryInsert.append(details[0][0])
+
+            #Display Authorization level of each person in frame
+            for (x,y,w,h) in faces_rect:
+                cv.putText(grayFrame, authorization, (x,y-5), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
+
+        #Display video with rectangles
+        cv.imwrite('Screenshot.jpg', grayFrame)
+        yield (b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + open('Screenshot.jpg', 'rb').read() + b'\r\n')
 
         #Stop reading if 'D' key is pressed
         if cv.waitKey(20) & 0xFF==ord('d'):
-            break
-
-       
-       # Stop reading if no face is detected
-        if(len(faces_rect) == 0):
             break
 
     #Stop capturing and remove video display window(s)
     cpt.release()
     cv.destroyAllWindows()
 
-#TestAccuracy()
-LiveVideo()
+#Run the Flask application
+app.run("localhost", 7777)
 
 cv.waitKey(0)

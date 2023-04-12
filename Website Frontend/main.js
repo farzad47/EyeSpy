@@ -147,8 +147,8 @@ function checkLogin(email,pass){
                 }
             }
         },
-        error: function(){
-            app.log("Device control failed");
+        error: function(xhr){
+        console.log(xhr)
         },
         processData: false,
         type: 'POST',

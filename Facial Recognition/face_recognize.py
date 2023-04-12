@@ -165,15 +165,12 @@ def LiveVideo():
             faces_region = grayFrame[y:y+h,x:x+h]
             cv.rectangle(grayFrame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
 
-        authorization = "Authorized"
-
         #Predict confidence for any face detected
         if(len(faces_rect) != 0):
             label, confidence = face_recognizer.predict(faces_region)
 
             #Send alert if unauthorized individual is detected
             if(confidence > 100 and not emailSent):
-                authorization = "Unauthorized"
                 
                 #Send an alert to the customer
                 sendEmail(customerPhone, customerCarrier, customerEmail)
@@ -193,20 +190,12 @@ def LiveVideo():
             else:
                 cursor.execute("SELECT * FROM person_detail WHERE PERSON_ID LIKE " + str(label))
                 details = cursor.fetchall()
-
-                #Potentially display person's name above their head
-                #authorization = details[0][1]
-                authorization = "Authorized"
                 
                 #Archive record of person detected
                 if queryInsert.count(details[0][0]) < 1:
                     cursor.execute("INSERT INTO history_all (personName, AlertSent, cust_id, authorized_status, entered_person_cust_id) VALUES ('"+ str(details[0][1]) +"','No','"+ str(customerID) +"','AUTHORIZED','"+ str(details[0][0]) +"')")
                     db.commit()
                     queryInsert.append(details[0][0])
-
-            #Display Authorization level of each person in frame
-            for (x,y,w,h) in faces_rect:
-                cv.putText(grayFrame, authorization, (x,y-5), cv.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
 
         #Display video with rectangles
         cv.imwrite('Screenshot.jpg', grayFrame)
@@ -222,6 +211,6 @@ def LiveVideo():
     cv.destroyAllWindows()
 
 #Run the Flask application
-app.run("localhost", 7777)
+#app.run("localhost", 7777)
 
 cv.waitKey(0)

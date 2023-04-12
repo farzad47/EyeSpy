@@ -88,9 +88,10 @@ function clickEvents() {
   var photos= imgArr.toString()
   var carrier= $("select[name='carrier']").val()
   var address = $("input[name='Address']").val()
+  var passwordLogin = $("input[name='passwordLogin']").val()
   $(".error").addClass('hide')
 
-     submitDemoDetails(nameTemp,email,phone,photos,carrier,address)
+     submitDemoDetails(nameTemp,email,phone,photos,carrier,address,passwordLogin)
     })
 }
 
@@ -180,11 +181,11 @@ function getHistoryData(){
     })
 }
 
-function submitDemoDetails(name,email,phone,photo,carrier,address){
+function submitDemoDetails(name,email,phone,photo,carrier,address,passwordLogin){
     
     $.ajax({
         contentType: 'application/json',
-        data: JSON.stringify({"user_name":name,"email_id": email ,"phone_no":phone,"photos_link":photo,"carrier":carrier,"address":address}),
+        data: JSON.stringify({"user_name":name,"email_id": email ,"phone_no":phone,"photos_link":photo,"carrier":carrier,"address":address,"password_login":passwordLogin}),
         dataType: 'json',
         success: function(data){
             window.location.href = "http://localhost:7777";

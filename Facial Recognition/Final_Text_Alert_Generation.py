@@ -9,8 +9,8 @@ CARRIERS = {
     "sprint": "@messaging.sprintpcs.com"
 }
  
-EMAIL = "krishnakittu0209@gmail.com"
-PASSWORD = "hyqaltfbfitoufvw"
+EMAIL = "mooregraphix86@gmail.com"
+PASSWORD = "ifemwykbuqmdgwya"
 
 def sendEmail(phoneNumber, carrier, email):
     smtp_server = "smtp.gmail.com"
@@ -23,7 +23,7 @@ def sendEmail(phoneNumber, carrier, email):
     
      #Una
     msg = MIMEMultipart()
-    msg["Subject"] = "UnAuthorized Person Recognized"
+    msg["Subject"] = "Unauthorized Person Recognized"
     msg["From"] = sender_email
     msg['To'] = ", ".join(receiver_email)
 
@@ -32,7 +32,7 @@ def sendEmail(phoneNumber, carrier, email):
     text["Subject"]="ALERT!"
     text["From"]= sender_email
     text['To']=", ".join(receiver_email)
-    body="Eyespy wants you to take some action  "
+    body="Eyespy detected an unauthorized individual ---"
 
     body_text = MIMEText(body, 'plain')  # 
     msg.attach(body_text)  # attaching the text body into msg
